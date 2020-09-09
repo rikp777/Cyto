@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{9439F429-DD32-44C7-A43B-50EC8560D981}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>Domain</RootNamespace>
+        <AssemblyName>Domain</AssemblyName>
+        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005">
+          <HintPath>..\packages\AutoMapper.10.0.0\lib\net461\AutoMapper.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+          <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Microsoft.CSharp" />
+        <Reference Include="System" />
+        <Reference Include="System.ComponentModel.DataAnnotations" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Xml" />
+        <Reference Include="TrackerEnabledDbContext, Version=3.7.0.0, Culture=neutral, PublicKeyToken=4f92af0b908c4a0a">
+          <HintPath>..\packages\TrackerEnabledDbContext.3.8.3\lib\net45\TrackerEnabledDbContext.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="TrackerEnabledDbContext.Common, Version=3.7.0.0, Culture=neutral, PublicKeyToken=4f92af0b908c4a0a">
+          <HintPath>..\packages\TrackerEnabledDbContext.Common.3.7\lib\net45\TrackerEnabledDbContext.Common.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Audit\AuditChangeEntity.cs" />
+        <Compile Include="Audit\AuditChangeHistory.cs" />
+        <Compile Include="Audit\AuditActionType.cs" />
+        <Compile Include="Contracts\IBaseEntity.cs" />
+        <Compile Include="Entities\AuditTrailChangeLogEntity.cs" />
+        <Compile Include="Entities\AuditTrailEntity.cs" />
+        <Compile Include="Entities\CompanyEntity.cs" />
+        <Compile Include="Entities\ExperimentEntity.cs" />
+        <Compile Include="Entities\PermissionEntity.cs" />
+        <Compile Include="Entities\ProjectEntity.cs" />
+        <Compile Include="Entities\RoleEntity.cs" />
+        <Compile Include="Entities\UserEntity.cs" />
+        <Compile Include="Contracts\BaseEntity.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Requests\CompanyRequest.cs" />
+        <Compile Include="Requests\ExperimentRequest.cs" />
+        <Compile Include="Requests\PermissionRequest.cs" />
+        <Compile Include="Requests\ProjectRequest.cs" />
+        <Compile Include="Requests\RoleRequest.cs" />
+        <Compile Include="Requests\UserRequest.cs" />
+        <Compile Include="Resources\AuditTrailResource.cs" />
+        <Compile Include="Resources\CompanyResource.cs" />
+        <Compile Include="Resources\ExperimentResource.cs" />
+        <Compile Include="Resources\PermissionResource.cs" />
+        <Compile Include="Resources\ProjectResource.cs" />
+        <Compile Include="Resources\RoleResource.cs" />
+        <Compile Include="Resources\UserResource.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="App.config" />
+      <None Include="packages.config" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>
