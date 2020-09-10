@@ -17,13 +17,13 @@ namespace LOGIC.Services.Company
     public class CompanyService : IGenericCrudService<CompanyResource, CompanyRequest>
     {
         private readonly CompanyRepository _companyRepository;
-        private readonly UserAuditTrailService _auditTrailService;
+        private readonly AuditTrailService _auditTrailService;
         private readonly UserRepository _userRepository;
         public CompanyService()
         {
             DatabaseContext context = new DatabaseContext();
             _companyRepository = new CompanyRepository(context);
-            _auditTrailService = new UserAuditTrailService(context);
+            _auditTrailService = new AuditTrailService(context);
             _userRepository = new UserRepository(context);
         }
 

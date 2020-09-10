@@ -49,7 +49,8 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="Services\Audit Trail\CompanyAuditTrail.cs" />
+        <Compile Include="Services\Audit Trail\AuditTrailService.cs" />
+        <Compile Include="Services\Audit Trail\CompanyAuditTrailService.cs" />
         <Compile Include="Services\Audit Trail\UserAuditTrailService.cs" />
         <Compile Include="Services\Company\CompanyProjectService.cs" />
         <Compile Include="Services\Company\CompanyService.cs" />

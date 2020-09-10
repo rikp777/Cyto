@@ -17,14 +17,14 @@ namespace LOGIC.Services.Experiment
     {
         private readonly ExperimentRepository _experimentRepository;
         private readonly CompanyRepository _companyRepository;
-        private readonly UserAuditTrailService _auditTrailService;
+        private readonly AuditTrailService _auditTrailService;
         private readonly UserRepository _userRepository;
         
         public ExperimentService()
         {
             DatabaseContext context = new DatabaseContext();
             _companyRepository = new CompanyRepository(context);
-            _auditTrailService = new UserAuditTrailService(context);
+            _auditTrailService = new AuditTrailService(context);
             _userRepository = new UserRepository(context);
             
             _experimentRepository = new ExperimentRepository(context);
@@ -39,16 +39,10 @@ namespace LOGIC.Services.Experiment
         public bool Create(ExperimentRequest entity) => _experimentRepository.Create(ExperimentRequest.ToEntity(entity));
         public bool Update(int id, ExperimentRequest entity)
         {
-            var authUser = _userRepository.GetById(1); 
-            
+            var authUser = _userRepository.GetById(2);
             var entityOld = _experimentRepository.GetById(id, new List<string>(){"Project", "Company"});
             var entityNew = ExperimentRequest.ToEntity(entity);
-            
-            //
-            //var project = entityOld.Project;
-            //var company = entityOld.Project.Company;
             var company = _companyRepository.GetById(1);
-
             
             var changes = new List<AuditTrailChangeLogEntity>();
             var one = new AuditTrailChangeLogEntity("Name", entityOld.Name, entityNew.Name);
@@ -60,7 +54,7 @@ namespace LOGIC.Services.Experiment
             var update = ExperimentRequest.ToEntity(entity);
             update.Id = id;
             var success = _experimentRepository.Update(id, update);
-            if (success) _auditTrailService.Capture(authUser, company, null, (AuditActionType) 1, "ExperimentService", "Update", entityOld, changes);
+            if (success) _auditTrailService.Capture(authUser, company, null, (AuditActionType) 2, "ExperimentService", "Update", entityOld, changes);
 
             return true;
         } 

@@ -71,6 +71,7 @@
           <DependentUpon>202009100659329_AuditTrail.cs</DependentUpon>
         </Compile>
         <Compile Include="Migrations\Configuration.cs" />
+        <Compile Include="Repository\AuditTrail\CompanyAuditTrailRepository.cs" />
         <Compile Include="Repository\AuditTrail\UserAuditTrailRepository.cs" />
         <Compile Include="Repository\Company\CompanyProjectRepository.cs" />
         <Compile Include="Repository\Company\CompanyRepository.cs" />

@@ -159,6 +159,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\Company\CompanyAuditTrailController.cs" />
     <Compile Include="Controllers\Company\CompanyController.cs" />
     <Compile Include="Controllers\Company\CompanyProjectController.cs" />
     <Compile Include="Controllers\Experiment\ExperimentController.cs" />
