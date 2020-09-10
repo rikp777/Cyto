@@ -21,7 +21,8 @@ namespace Domain.Entities
         public virtual ICollection<RoleEntity> Roles { get; set; }
         //User has many Projects
         public virtual ICollection<ProjectEntity> Projects { get; set; }
-        
+        //User has many AuditTrails
+        public virtual ICollection<AuditTrailEntity> AuditTrails { get; set; }
         
     }
 }
