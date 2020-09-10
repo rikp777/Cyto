@@ -11,7 +11,7 @@ namespace DAL.Repository
     public abstract class GenericCrudRepository<TEntity> where TEntity : class 
     {
         private readonly DatabaseContext _context;
-        private readonly DbSet<TEntity> _dbSet;
+        protected readonly DbSet<TEntity> _dbSet;
 
         protected GenericCrudRepository(DatabaseContext context)
         {
@@ -85,7 +85,9 @@ namespace DAL.Repository
         public bool Update(int id, TEntity entityToUpdate)
         {
             _dbSet.Attach(entityToUpdate);
-            _context.Entry(entityToUpdate).State = EntityState.Modified;
+            var temp = _dbSet.Find(id);
+            temp = entityToUpdate;
+            _context.Entry(entityToUpdate).Property(x => entityToUpdate).IsModified = true;
 
             return Save();
         }
