@@ -5,12 +5,13 @@ using System.Linq;
 using System.Linq.Expressions;
 using DAL.Context;
 using DAL.Repository.Interfaces;
+using Domain.Contracts;
 
 namespace DAL.Repository
 {
-    public abstract class GenericCrudRepository<TEntity> where TEntity : class 
+    public abstract class GenericCrudRepository<TEntity> where TEntity : BaseEntity 
     {
-        private readonly DatabaseContext _context;
+        protected readonly DatabaseContext _context;
         protected readonly DbSet<TEntity> _dbSet;
 
         protected GenericCrudRepository(DatabaseContext context)
@@ -63,36 +64,48 @@ namespace DAL.Repository
         public bool Delete(int id)
         {
             var entityToDelete = _dbSet.Find(id);
+            Console.WriteLine(entityToDelete);
             Delete(entityToDelete);
             return Save();
         }
 
         
         
-        public bool Delete(TEntity entityToDelete)
+        private void Delete(TEntity entityToDelete)
         {
             if (_context.Entry(entityToDelete).State == EntityState.Detached)
             {
                 _dbSet.Attach(entityToDelete);
             }
-
+            
             _dbSet.Remove(entityToDelete);
-            return Save();
+            // return Save();
         }
 
         
         
         public bool Update(int id, TEntity entityToUpdate)
         {
-            _dbSet.Attach(entityToUpdate);
-            var temp = _dbSet.Find(id);
-            temp = entityToUpdate;
-            _context.Entry(entityToUpdate).Property(x => entityToUpdate).IsModified = true;
+            // _dbSet.Attach(entityToUpdate);
+            // var temp = _dbSet.First(u => u.Id == id);
+            // Console.WriteLine(temp);
+            // temp = entityToUpdate;
+            // _context.Entry(temp).Property(x=>x.Id).IsModified = false;
+            // _context.Entry(temp).State = EntityState.Modified;
+            
+            // _context.Entry(entityToUpdate).State = EntityState.Modified;
+            
+            var entity = _dbSet.Find(id);
+            if (entity == null) return false;
+            
+            _context.Entry(entity).CurrentValues.SetValues(entityToUpdate);
 
             return Save();
+
+
         }
 
-        private bool Save()
+        protected bool Save()
         {
             var saved = _context.SaveChanges();
             return saved > 0;

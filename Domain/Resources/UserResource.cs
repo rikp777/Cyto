@@ -10,7 +10,6 @@ namespace Domain.Resources
 
         public static UserResource FromEntity(UserEntity user)
         {
-            Console.WriteLine(user + "222");
             return new UserResource()
             {
                 Name = user.Name,

@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -51,6 +52,8 @@ namespace DAL.Repository.Company
         public List<ProjectEntity> GetAll(int companyId)
         {
             var company = _dbSetCompanies.Find(companyId);
+            Console.WriteLine(company);
+            Console.WriteLine(company.Projects == null);
 
             return company?.Projects.ToList();
         }

@@ -25,7 +25,7 @@ namespace LOGIC.Services.User
             return userEntity == null ? null : UserResource.FromEntity(_userRepository.GetById(id));
         }
 
-        public List<UserResource> GetAll(int size, int page) => _userRepository.GetAll()
+        public List<UserResource> GetAll() => _userRepository.GetAll()
             .Select(UserResource.FromEntity)
             .ToList();
 
@@ -44,7 +44,7 @@ namespace LOGIC.Services.User
         public UserResource GetByName(string name)
         {
             var userEntity = _userRepository.GetByName(name);
-            return userEntity == null ? null : UserResource.FromEntity(_userRepository.GetByName(name));
+            return userEntity == null ? null : UserResource.FromEntity(userEntity);
         }
 
         public UserResource GetByEmail(string email)

@@ -7,9 +7,10 @@ namespace API.Controllers.Interfaces
 {
     public interface IGenericCrudController<TEntity>
     {
-        List<TEntity> GetAll( Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, 
+        List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string includedProperties = "");
+
         TEntity GetById(int id);
 
         bool Create(TEntity entity);

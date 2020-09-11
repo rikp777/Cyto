@@ -12,19 +12,25 @@ namespace LOGIC.Services.Experiment
     public class ExperimentService : IGenericCrudService<ExperimentResource, ExperimentRequest>
     {
         private readonly ExperimentRepository _experimentRepository;
+
         public ExperimentService()
         {
             _experimentRepository = new ExperimentRepository(new DatabaseContext());
         }
 
         public ExperimentResource GetById(int id) => ExperimentResource.FromEntity(_experimentRepository.GetById(id));
-        public List<ExperimentResource> GetAll(int size, int page) =>_experimentRepository
-            .GetAll().Skip(size * (page -1)).Take(size)
+
+        public List<ExperimentResource> GetAll() => _experimentRepository
+            .GetAll()
             .Select(ExperimentResource.FromEntity)
             .ToList();
 
-        public bool Create(ExperimentRequest entity) => _experimentRepository.Create(ExperimentRequest.ToEntity(entity));
-        public bool Update(int id, ExperimentRequest entity) => _experimentRepository.Update(id, ExperimentRequest.ToEntity(entity));
+        public bool Create(ExperimentRequest entity) =>
+            _experimentRepository.Create(ExperimentRequest.ToEntity(entity));
+
+        public bool Update(int id, ExperimentRequest entity) =>
+            _experimentRepository.Update(id, ExperimentRequest.ToEntity(entity));
+
         public bool Delete(int id) => _experimentRepository.Delete(id);
     }
 }

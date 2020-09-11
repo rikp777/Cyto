@@ -21,7 +21,7 @@ namespace API.Controllers.User
         [Route("users")]
         public IHttpActionResult GetAll()
         {
-            var results = _userService.GetAll(1, 1);
+            var results = _userService.GetAll();
             if (results.ToArray().Length == 0) return Ok("There are no users found");
 
             return Ok(results);
@@ -40,6 +40,7 @@ namespace API.Controllers.User
         [Route("users")]
         public IHttpActionResult Create([FromBody] UserRequest userToCreate)
         {
+            if (userToCreate == null) return BadRequest("Empty request body!");
             if (userToCreate.Name == null) return BadRequest("You cannot create a user without specifying the name");
             if (userToCreate.Email == null) return BadRequest("You cannot create a user without specifying the email");
             if (!IsValid(userToCreate.Email)) return BadRequest("Invalid email address!");
