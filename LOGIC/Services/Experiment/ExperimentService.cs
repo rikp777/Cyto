@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using DAL.Context;
 using DAL.Repository.Company;
 using DAL.Repository.Experiment;
@@ -40,10 +41,9 @@ namespace LOGIC.Services.Experiment
         public bool Update(int id, ExperimentRequest entity)
         {
             var authUser = _userRepository.GetById(2);
-            var entityOld = _experimentRepository.GetById(id, new List<string>(){"Project", "Company"});
+            var entityOld = _experimentRepository.GetById(id, new List<string>(){"Project.Company"});
             var entityNew = ExperimentRequest.ToEntity(entity);
-            var company = _companyRepository.GetById(1);
-            
+
             var changes = new List<AuditTrailChangeLogEntity>();
             var one = new AuditTrailChangeLogEntity("Name", entityOld.Name, entityNew.Name);
             if (one.Changed) changes.Add(one);
@@ -54,7 +54,7 @@ namespace LOGIC.Services.Experiment
             var update = ExperimentRequest.ToEntity(entity);
             update.Id = id;
             var success = _experimentRepository.Update(id, update);
-            if (success) _auditTrailService.Capture(authUser, company, null, (AuditActionType) 2, "ExperimentService", "Update", entityOld, changes);
+            if (success) _auditTrailService.Capture(authUser, entityOld.Project.Company, null, (AuditActionType) 2, "ExperimentService", "Update", entityOld, changes);
 
             return true;
         } 

@@ -11,8 +11,8 @@ namespace Domain.Entities
         
         //Relationships 
         //Company has many projects
-        public ICollection<ProjectEntity> Projects { get; set; }
+        public virtual ICollection<ProjectEntity> Projects { get; set; }
         //Company has many users
-        public ICollection<UserEntity> Users { get; set; }
+        public virtual ICollection<UserEntity> Users { get; set; }
     }
 }

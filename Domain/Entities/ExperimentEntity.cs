@@ -9,7 +9,7 @@ namespace Domain.Entities
 
         //Relationships 
         //Experiment has one project
-        public ProjectEntity Project { get; set; }
+        public virtual ProjectEntity Project { get; set; }
 
         public ExperimentEntity() { }
     }

@@ -167,3 +167,6 @@ Cyto/.DS_Store
 
 # Vim swap files
 Cyto/*.swp
+
+# Package lock
+Cyto/package-lock.json
