@@ -56,6 +56,8 @@ namespace LOGIC.Services.Experiment
             var success = _experimentRepository.Update(id, update);
             if (success) _auditTrailService.Capture(authUser, entityOld.Project.Company, null, (AuditActionType) 2, "ExperimentService", "Update", entityOld, changes);
 
+            //primary key
+            //base url of request 
             return true;
         } 
         
