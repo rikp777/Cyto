@@ -13,10 +13,16 @@ namespace LOGIC.Services.Company
     {
         private readonly CompanyRepository _companyRepository;
 
+        public CompanyService(IDatabaseContext dbContext)
+        {
+            _companyRepository = new CompanyRepository(dbContext);
+        }
+        
         public CompanyService()
         {
             _companyRepository = new CompanyRepository(new DatabaseContext());
         }
+        
 
         public CompanyResource GetById(int id)
         {

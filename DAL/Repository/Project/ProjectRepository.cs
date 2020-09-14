@@ -6,7 +6,7 @@ namespace DAL.Repository.Project
 {
     public class ProjectRepository : GenericCrudRepository<ProjectEntity>, IGenericCrudRepository<ProjectEntity>
     {
-        public ProjectRepository(DatabaseContext context) : base(context)
+        public ProjectRepository(DatabaseContext context) : base(context, context.Projects)
         {
         }
     }

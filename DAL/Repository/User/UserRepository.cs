@@ -7,19 +7,19 @@ namespace DAL.Repository.User
 {
     public class UserRepository : GenericCrudRepository<UserEntity>, IGenericCrudRepository<UserEntity>
     {
-        public UserRepository(DatabaseContext context) : base(context)
+        public UserRepository(IDatabaseContext context) : base(context, context.Users)
         {
         }
 
         public UserEntity GetByName(string name)
         {
-            var data = _dbSet.SingleOrDefault(user => user.Name == name);
+            var data = DbSet.SingleOrDefault(user => user.Name == name);
             return data;
         }
 
         public UserEntity GetByEmail(string email)
         {
-            var data = _dbSet.SingleOrDefault(user => user.Email == email);
+            var data = DbSet.SingleOrDefault(user => user.Email == email);
             return data;
         }
     }

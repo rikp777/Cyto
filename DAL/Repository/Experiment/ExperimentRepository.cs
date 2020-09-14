@@ -6,8 +6,11 @@ namespace DAL.Repository.Experiment
 {
     public class ExperimentRepository : GenericCrudRepository<ExperimentEntity>, IGenericCrudRepository<ExperimentEntity>
     {
-        public ExperimentRepository(DatabaseContext context) : base(context)
+        public ExperimentRepository(IDatabaseContext context) : base(context, context.Experiments)
         {
         }
+        
+        
+        
     }
 }

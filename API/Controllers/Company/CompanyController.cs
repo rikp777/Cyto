@@ -1,5 +1,5 @@
-using System;
 using System.Web.Http;
+using DAL.Context;
 using Domain.Requests;
 using LOGIC.Services.Company;
 
@@ -13,6 +13,11 @@ namespace API.Controllers.Company
         public CompanyController()
         {
             _companyService = new CompanyService();
+        }
+
+        public CompanyController(IDatabaseContext context)
+        {
+            _companyService = new CompanyService(context);
         }
 
         [HttpGet]
