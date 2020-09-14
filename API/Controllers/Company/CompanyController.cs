@@ -1,3 +1,4 @@
+using System;
 using System.Web.Http;
 using DAL.Context;
 using Domain.Requests;
@@ -35,6 +36,7 @@ namespace API.Controllers.Company
         public IHttpActionResult GetById(int id)
         {
             var result = _companyService.GetById(id);
+            ;
             if (result == null) return NotFound();
             return Ok(result);
         }
@@ -61,6 +63,8 @@ namespace API.Controllers.Company
         [Route("companies/{id}")]
         public IHttpActionResult Update(int id, CompanyRequest companyRequest)
         {
+            if (companyRequest == null) return BadRequest("Empty request body!");
+
             var company = _companyService.GetById(id);
             if (company == null) return NotFound();
 

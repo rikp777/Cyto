@@ -62,7 +62,7 @@ namespace DAL.Repository
         public bool Delete(int id)
         {
             var entityToDelete = DbSet.Find(id);
-            Console.WriteLine(entityToDelete);
+            Console.WriteLine(entityToDelete.Id);
             Delete(entityToDelete);
             // return Save();
             return Context.Save();

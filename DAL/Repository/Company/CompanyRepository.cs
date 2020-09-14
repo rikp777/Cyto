@@ -14,8 +14,16 @@ namespace DAL.Repository.Company
         public new bool Update(int id, CompanyEntity entity)
         {
             var temp = DbSet.First(u => u.Id == id);
-            temp.Name = entity.Name;
-            temp.Description = entity.Description;
+            if (entity.Name != null)
+            {
+                temp.Name = entity.Name;
+            }
+
+            if (entity.Description != null)
+            {
+                temp.Description = entity.Description;
+            }
+
             // Context.Entry(temp).Property(x => x.Name).IsModified = true;
             // Context.Entry(temp).Property(x => x.Description).IsModified = true;
             Context.MarkAsModified(temp);

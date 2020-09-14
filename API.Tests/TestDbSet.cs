@@ -21,8 +21,22 @@ namespace API.Tests
 
         public override T Add(T item)
         {
+            item.Id = GetLastId();
             _data.Add(item);
+
             return item;
+        }
+
+        private int GetLastId()
+        {
+            var lastId = 1;
+            if (_data.Count == 0)
+            {
+                return lastId;
+            }
+
+            lastId = _data.Last().Id;
+            return ++lastId;
         }
 
         public override T Remove(T item)
@@ -45,6 +59,11 @@ namespace API.Tests
         public override TDerivedEntity Create<TDerivedEntity>()
         {
             return Activator.CreateInstance<TDerivedEntity>();
+        }
+
+        public override T Find(params object[] keyValues)
+        {
+            return this.SingleOrDefault(entity => entity.Id == (int) keyValues.Single());
         }
 
         public override ObservableCollection<T> Local

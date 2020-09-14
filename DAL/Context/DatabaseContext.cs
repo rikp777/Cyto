@@ -43,7 +43,7 @@ namespace DAL.Context
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-            
+            modelBuilder.Conventions.Add<OneToManyCascadeDeleteConvention>();
             var userBuilder = new UserBuilder(modelBuilder.Entity<UserEntity>());
             var roleBuilder = new RoleBuilder(modelBuilder.Entity<RoleEntity>());
             var companyBuilder = new CompanyBuilder(modelBuilder.Entity<CompanyEntity>());

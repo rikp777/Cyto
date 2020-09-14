@@ -64,7 +64,8 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Company\Tests.cs" />
+        <Compile Include="Company\CompanyProjectTest.cs" />
+        <Compile Include="Company\CompanyTest.cs" />
         <Compile Include="TestContext.cs" />
         <Compile Include="TestDbSet.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
