@@ -15,7 +15,10 @@ namespace LOGIC.Services.Audit_Trail
         }
         public List<AuditTrailResource> GetAll(int companyId)
         {
-            return _companyAuditTrailRepository.GetAll(companyId).Select(AuditTrailResource.FromEntity).ToList();
+            return _companyAuditTrailRepository
+                .GetAll(companyId)
+                .Select(AuditTrailResource.FromEntity)
+                .ToList();
         }
 
         public AuditTrailResource GetById(int companyId, int auditTrailId)

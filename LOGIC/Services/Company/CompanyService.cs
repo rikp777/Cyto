@@ -17,13 +17,13 @@ namespace LOGIC.Services.Company
     public class CompanyService : IGenericCrudService<CompanyResource, CompanyRequest>
     {
         private readonly CompanyRepository _companyRepository;
-        private readonly AuditTrailService _auditTrailService;
+        //private readonly AuditTrailService _auditTrailService;
         private readonly UserRepository _userRepository;
         public CompanyService()
         {
             DatabaseContext context = new DatabaseContext();
             _companyRepository = new CompanyRepository(context);
-            _auditTrailService = new AuditTrailService(context);
+            //_auditTrailService = new AuditTrailService(context);
             _userRepository = new UserRepository(context);
         }
 
@@ -37,23 +37,23 @@ namespace LOGIC.Services.Company
         public bool Update(int id, CompanyRequest entity)
         {
             
-            var entityOld = _companyRepository.GetById(id);
-            var entityNew = CompanyRequest.ToEntity(entity);
-            var authUser = _userRepository.GetById(1);
-            var company = _companyRepository.GetById(1);
+            //var entityOld = _companyRepository.GetById(id);
+            //var entityNew = CompanyRequest.ToEntity(entity);
+            //var authUser = _userRepository.GetById(1);
+           // var company = _companyRepository.GetById(1);
 
-            List<AuditTrailChangeLogEntity> changes = new List<AuditTrailChangeLogEntity>();
+            //List<AuditTrailChangeLogEntity> changes = new List<AuditTrailChangeLogEntity>();
 
-            var one = new AuditTrailChangeLogEntity("Name", entityOld.Name, entityNew.Name);
-            if (one.Changed) changes.Add(one);
+            //var one = new AuditTrailChangeLogEntity("Name", entityOld.Name, entityNew.Name);
+            //if (one.Changed) changes.Add(one);
             
-            var two = new AuditTrailChangeLogEntity("Description", entityOld.Description, entityNew.Description);
-            if (two.Changed) changes.Add(two);
+            //var two = new AuditTrailChangeLogEntity("Description", entityOld.Description, entityNew.Description);
+            //if (two.Changed) changes.Add(two);
             
             var update = CompanyRequest.ToEntity(entity);
             update.Id = id;
              bool success = _companyRepository.Update(id, update);
-             if (success) _auditTrailService.Capture(authUser, company, null, (AuditActionType) 1, "CompanyService", "Update", entityOld, changes);
+             //if (success) _auditTrailService.Capture(authUser, company, null, (AuditActionType) 1, "CompanyService", "Update", entityOld.Id.ToString(), entityOld, changes);
 
             return true;
         } 

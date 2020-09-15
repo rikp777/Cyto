@@ -70,7 +70,12 @@
         <Compile Include="Migrations\202009100659329_AuditTrail.Designer.cs">
           <DependentUpon>202009100659329_AuditTrail.cs</DependentUpon>
         </Compile>
+        <Compile Include="Migrations\202009150835495_PrimaryKey.cs" />
+        <Compile Include="Migrations\202009150835495_PrimaryKey.Designer.cs">
+          <DependentUpon>202009150835495_PrimaryKey.cs</DependentUpon>
+        </Compile>
         <Compile Include="Migrations\Configuration.cs" />
+        <Compile Include="Repository\AuditTrail\AuditTrailRepository.cs" />
         <Compile Include="Repository\AuditTrail\CompanyAuditTrailRepository.cs" />
         <Compile Include="Repository\AuditTrail\UserAuditTrailRepository.cs" />
         <Compile Include="Repository\Company\CompanyProjectRepository.cs" />
@@ -108,6 +113,9 @@
     <ItemGroup>
       <EmbeddedResource Include="Migrations\202009100659329_AuditTrail.resx">
         <DependentUpon>202009100659329_AuditTrail.cs</DependentUpon>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Migrations\202009150835495_PrimaryKey.resx">
+        <DependentUpon>202009150835495_PrimaryKey.cs</DependentUpon>
       </EmbeddedResource>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

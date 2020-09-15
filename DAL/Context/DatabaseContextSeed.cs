@@ -8,22 +8,22 @@ namespace DAL.Context
         public static void Seed(DatabaseContext context)
         {
             PermissonSeeder.Seeder(context.Permissions);
-            context.SaveChanges();
+            context.Save();
             
             RoleSeeder.Seeder(context.Roles);
-            context.SaveChanges();
+            context.Save();
             
             UserSeeder.Seeder(context.Users);
-            context.SaveChanges();
+            context.Save();
             
             CompanySeeder.Seeder(context.Companies);
-            context.SaveChanges();
+            context.Save();
             
             ProjectSeeder.Seeder(context.Projects, context.Companies);
-            context.SaveChanges();
+            context.Save();
             
             ExperimentSeeder.Seeder(context.Experiments, context.Projects);
-            context.SaveChanges();
+            context.Save();
         }
     }
 }

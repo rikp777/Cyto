@@ -16,22 +16,27 @@ namespace DAL.Repository.AuditTrail
         {
             this._context = context;
             this._dbSetCompanies = context.Set<CompanyEntity>();
-            _dbSetAuditTrails = context.Set<AuditTrailEntity>();
+            this._dbSetAuditTrails = context.Set<AuditTrailEntity>();
         }
 
         public AuditTrailEntity GetById(int companyId, int auditTrailId)
         {
-            var audits = _dbSetAuditTrails.ToList().Where(x => x.Company.Id == companyId).ToList();
-            return audits.Find(x => x.Id == auditTrailId);
+            var audit = _dbSetAuditTrails
+                .Where(x => x.Company.Id == companyId)
+                .Include(x => x.Company)
+                .Include(x => x.User)
+                .First(x => x.Id == auditTrailId);
+            return audit;
         }
 
         public List<AuditTrailEntity> GetAll(int companyId)
         {
-            //var company = _dbSetCompanies.Find(companyId);
+            var audits = _dbSetAuditTrails
+               .Where(a => a.Company.Id == companyId)
+               .Include(x => x.Company)
+               .Include(x => x.User);
 
-            var audits = _dbSetAuditTrails.ToList().Where(x => x.Company.Id == companyId).ToList();
-
-            return audits;
+            return audits.ToList();
         }
     }
 }

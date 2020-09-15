@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using Domain.Entities;
+using Newtonsoft.Json;
 
 namespace Domain.Resources
 {
@@ -13,23 +15,23 @@ namespace Domain.Resources
         public string Reason { get; set; }
         public string CompanyName { get; set; }
         public string UserName { get; set; }
-        public ICollection<AuditTrailChangeLogEntity> Changes { get; set; }
-
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public ICollection<AuditTrailChangeLogResource> Changes { get; set; }
+        
         public static AuditTrailResource FromEntity(AuditTrailEntity entity)
         {
-            AuditTrailResource resource = new AuditTrailResource();
-            resource.CreatedAt = entity.CreatedAt;
-            resource.ActionType = entity.ActionType.ToString();
-            resource.MethodName = entity.MethodName;
-            resource.MethodColor = entity.MethodColor;
-            resource.IpAddress = entity.IpAddress;
-            resource.Reason = entity.Reason;
-            resource.Changes = entity.AuditTrailChangeLog;
-            
-            if (entity.Company != null) resource.CompanyName = entity.Company.Name;
-            if (entity.User != null) resource.UserName = entity.User.Name;
-
-            return resource;
+            return new AuditTrailResource()
+            {
+                CreatedAt = entity.CreatedAt,
+                ActionType = entity.ActionType.ToString(),
+                MethodName = entity.MethodName,
+                MethodColor = entity.MethodColor,
+                IpAddress = entity.IpAddress,
+                Reason = entity.Reason,
+                CompanyName = entity.Company.Name,
+                UserName = entity.User.Name,
+                Changes = entity.AuditTrailChangeLog.Select(AuditTrailChangeLogResource.FromEntity).ToList().Count > 0 ? entity.AuditTrailChangeLog.Select(AuditTrailChangeLogResource.FromEntity).ToList() : null
+            };
         }
     }
 }

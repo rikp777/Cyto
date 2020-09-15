@@ -8,10 +8,13 @@ namespace Domain.Entities
     public class AuditTrailEntity : BaseEntity
     {
         public CompanyEntity Company { get; set; }
-        public UserEntity User{ get; set; }
+        public UserEntity User { get; set; }
         public PermissionEntity Permission { get; set; }
+        
+        //public string BaseUrl { get; set; }
 
         public string TableName { get; set; }
+        public string PrimaryKey { get; set; }
         public virtual ICollection<AuditTrailChangeLogEntity> AuditTrailChangeLog { get; set; }
 
         public string CreatedAt { get; set; }

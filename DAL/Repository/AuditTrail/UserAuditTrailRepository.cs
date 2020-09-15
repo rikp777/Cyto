@@ -23,54 +23,21 @@ namespace DAL.Repository.AuditTrail
         
         public AuditTrailEntity GetById(int userId, int auditTrailId)
         {
-            var user = _dbSetUsers.Find(userId);
-
-            _context.AuditTrails.Include(x => x.AuditTrailChangeLog);
-
-            return user?.AuditTrails.First(a => a.Id == auditTrailId);
+            var audit = _dbSetAuditTrails
+                .Where(x => x.User.Id == userId)
+                .Include(x => x.Company)
+                .Include(x => x.User)
+                .First(x => x.Id == auditTrailId);
+            return audit;
         }
 
         public List<AuditTrailEntity> GetAll(int userId)
         {
-            var user = _dbSetUsers.Find(userId);
-
-            return user?.AuditTrails.ToList();
-        }
-
-        public List<AuditTrailEntity> GetAll(
-            Expression<Func<AuditTrailEntity, bool>> filter = null,
-            Func<IQueryable<AuditTrailEntity>, IOrderedQueryable<AuditTrailEntity>> orderBy = null, 
-            string includedProperties = "")
-        {
-            IQueryable<AuditTrailEntity> query = _dbSetAuditTrails;
-
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-
-            foreach (var includeProperty in includedProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includedProperties);
-            }
-
-            return orderBy != null ? orderBy(query).ToList() : query.ToList();
-        }
-        
-        
-        public bool Create(AuditTrailEntity auditTrail)
-        {
-            _dbSetAuditTrails.Add(auditTrail);
-
-            return Save();
-        }
-        
-        
-        
-        private bool Save()
-        {
-            var saved = _context.SaveChanges();
-            return saved > 0;
+            var audits = _dbSetAuditTrails
+                .Where(a => a.User.Id == userId)
+                .Include(x => x.Company)
+                .Include(x => x.User);
+            return audits.ToList();
         }
     }
 }
