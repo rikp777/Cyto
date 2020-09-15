@@ -128,7 +128,7 @@
             </div>
             <div class="ml-2 overflow-hidden">
               <div class="flex items-center">
-                <a href="javascript:;" class="font-medium truncate mr-5">
+                <a href="javascript:" class="font-medium truncate mr-5">
                   username
                 </a>
                 <div class="text-xs text-gray-500 ml-auto whitespace-no-wrap">

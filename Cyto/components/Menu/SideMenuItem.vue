@@ -70,7 +70,7 @@
 </template>
 <script>
 import Velocity from 'velocity-animate'
-import { mapGetters } from 'vuex'
+import {mapGetters} from 'vuex'
 import ToolTip from '~/components/ToolTip/ToolTip'
 
 export default {
