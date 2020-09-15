@@ -36,7 +36,7 @@ namespace API.Controllers.Company
         public IHttpActionResult GetById(int id)
         {
             var result = _companyService.GetById(id);
-            ;
+            
             if (result == null) return NotFound();
             return Ok(result);
         }
@@ -71,7 +71,8 @@ namespace API.Controllers.Company
             var result = _companyService.Update(id, companyRequest);
             return Ok(result);
         }
-
+        
+        //TODO:
         [HttpDelete]
         [Route("companies/{id}")]
         public IHttpActionResult Delete(int id)

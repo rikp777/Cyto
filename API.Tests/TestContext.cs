@@ -10,11 +10,10 @@ namespace API.Tests
     {
         public TestContext()
         {
-            // this.Products = new TestDbSet<>();
-            this.Companies = new TestDbSet<CompanyEntity>();
+            Companies = new TestDbSet<CompanyEntity>();
+            Projects = new TestDbSet<ProjectEntity>();
         }
 
-        // public DbSet<Product> Products { get; set; }
 
         public DbSet<RoleEntity> Roles { get; set; }
         public DbSet<UserEntity> Users { get; set; }

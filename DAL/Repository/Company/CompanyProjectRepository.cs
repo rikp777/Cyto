@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -11,24 +10,27 @@ namespace DAL.Repository.Company
 {
     public class CompanyProjectRepository : IGenericRelationshipRepository<ProjectEntity>
     {
-        private readonly DatabaseContext _context;
+        private readonly IDatabaseContext _context;
         private readonly DbSet<CompanyEntity> _dbSetCompanies;
         private readonly DbSet<ProjectEntity> _dbSetProjects;
 
-        public CompanyProjectRepository(DatabaseContext context)
+        public CompanyProjectRepository(IDatabaseContext context)
         {
             _context = context;
-            _dbSetCompanies = context.Set<CompanyEntity>();
-            _dbSetProjects = context.Set<ProjectEntity>();
+            _dbSetCompanies = context.Companies;
+            _dbSetProjects = context.Projects;
         }
-        
+
         public bool Attach(int companyId, int projectId)
         {
             var company = _dbSetCompanies.Find(companyId);
             var project = _dbSetProjects.Find(projectId);
+            Console.WriteLine(company == null);
+            Console.WriteLine(project == null);
 
             company?.Projects.Add(project);
 
+            // _context.Entry(company).Collection<ProjectEntity>("Projects").IsModified = true;
             return _context.Save();
         }
 
@@ -46,16 +48,13 @@ namespace DAL.Repository.Company
         {
             var company = _dbSetCompanies.Find(companyId);
 
-            return company?.Projects.First(p => p.Id == projectId);
+            return company?.Projects?.First(p => p.Id == projectId);
         }
 
         public List<ProjectEntity> GetAll(int companyId)
         {
             var company = _dbSetCompanies.Find(companyId);
-            Console.WriteLine(company);
-            Console.WriteLine(company.Projects == null);
-
-            return company?.Projects.ToList();
+            return company?.Projects?.ToList();
         }
     }
 }

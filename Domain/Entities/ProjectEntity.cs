@@ -10,7 +10,7 @@ namespace Domain.Entities
 
         //Relationships 
         //Project has one Company
-        public CompanyEntity Company { get; set; }
+        public virtual CompanyEntity Company { get; set; }
         //Project has many Experiments
         public virtual ICollection<ExperimentEntity > Experiments { get; set; }
         //Project has many Users

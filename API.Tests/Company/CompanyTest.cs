@@ -45,7 +45,7 @@ namespace API.Tests.Company
         {
             var context = new TestContext();
             context.Companies.Add(new CompanyEntity()
-                {Id = 1, Name = "MySuccessfulCompany", Description = "Best company ever"});
+                {Name = "MySuccessfulCompany", Description = "Best company ever"});
             var controller = new CompanyController(context);
             var res = controller.GetById(1) as OkNegotiatedContentResult<CompanyResource>;
 

@@ -1,5 +1,6 @@
 using System;
 using System.Web.Http;
+using DAL.Context;
 using LOGIC.Services.Company;
 using LOGIC.Services.User;
 
@@ -14,14 +15,17 @@ namespace API.Controllers.Company
         {
             _companyProjectService = new CompanyProjectService();
         }
+        public CompanyProjectController(IDatabaseContext context)
+        {
+            _companyProjectService = new CompanyProjectService(context);
+        }
 
         [HttpGet]
         [Route("{companyId}/projects")]
         public IHttpActionResult GetAll(int companyId)
         {
-            Console.WriteLine(companyId);
             var results = _companyProjectService.GetAll(companyId);
-            Console.WriteLine(results == null);
+            if (results == null) return NotFound();
             return Ok(results);
         }
 
@@ -30,6 +34,7 @@ namespace API.Controllers.Company
         public IHttpActionResult GetById(int companyId, int projectId)
         {
             var results = _companyProjectService.GetById(companyId, projectId);
+            if (results == null) return NotFound();
             return Ok(results);
         }
 
