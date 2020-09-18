@@ -19,25 +19,27 @@ namespace DAL.Repository.User
             _dbSetUsers = context.Set<UserEntity>();
             _dbSetCompanies = context.Set<CompanyEntity>();
         }
-        
-        public bool Attach(int userId, int companyId)
+
+        public CompanyEntity Attach(int userId, int companyId)
         {
             var user = _dbSetUsers.Find(userId);
             var company = _dbSetCompanies.Find(companyId);
 
             user?.Companies.Add(company);
 
-            return _context.Save();
+            _context.Save();
+            return company;
         }
 
-        public bool Detach(int userId, int companyId)
+        public CompanyEntity Detach(int userId, int companyId)
         {
             var user = _dbSetUsers.Find(userId);
             var company = _dbSetCompanies.Find(companyId);
 
             user?.Companies.Remove(company);
 
-            return _context.Save();
+            _context.Save();
+            return company;
         }
 
         public CompanyEntity GetById(int userId, int companyId)

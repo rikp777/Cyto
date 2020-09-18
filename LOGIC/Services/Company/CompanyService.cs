@@ -27,13 +27,9 @@ namespace LOGIC.Services.Company
         public CompanyResource GetById(int id)
         {
             var companyEntity = _companyRepository.GetById(id);
-            return companyEntity == null ? null : CompanyResource.FromEntity(_companyRepository.GetById(id));
+            return companyEntity == null ? null : CompanyResource.FromEntity(companyEntity);
         }
-
-        // public List<CompanyResource> GetAll(int size, int page) =>_companyRepository
-        //     .GetAll().Skip(size * (page -1)).Take(size)
-        //     .Select(CompanyResource.FromEntity)
-        //     .ToList();
+        
         public List<CompanyResource> GetAll() => _companyRepository
             .GetAll()
             .Select(CompanyResource.FromEntity)

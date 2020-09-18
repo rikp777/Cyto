@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Web.Http;
 using DAL.Context;
 using LOGIC.Services.Company;
@@ -15,6 +16,7 @@ namespace API.Controllers.Company
         {
             _companyProjectService = new CompanyProjectService();
         }
+
         public CompanyProjectController(IDatabaseContext context)
         {
             _companyProjectService = new CompanyProjectService(context);
@@ -25,7 +27,7 @@ namespace API.Controllers.Company
         public IHttpActionResult GetAll(int companyId)
         {
             var results = _companyProjectService.GetAll(companyId);
-            if (results == null) return NotFound();
+            if (results == null || results.Count == 0) return NotFound();
             return Ok(results);
         }
 
@@ -33,25 +35,26 @@ namespace API.Controllers.Company
         [Route("{companyId}/projects/{projectId}")]
         public IHttpActionResult GetById(int companyId, int projectId)
         {
-            var results = _companyProjectService.GetById(companyId, projectId);
-            if (results == null) return NotFound();
-            return Ok(results);
+            var result = _companyProjectService.GetById(companyId, projectId);
+            if (result == null) return NotFound();
+            return Ok(result);
         }
 
         [HttpPost]
         [Route("{companyId}/projects")]
         public IHttpActionResult Attach(int companyId, int projectId)
         {
-            Console.WriteLine(projectId);
             var results = _companyProjectService.Attach(companyId, projectId);
+            if (results == null) return NotFound();
             return Ok(results);
         }
 
         [HttpDelete]
         [Route("{companyId}/projects")]
-        public IHttpActionResult Detach(int userId, int projectId)
+        public IHttpActionResult Detach(int companyId, int projectId)
         {
-            var results = _companyProjectService.Detach(userId, projectId);
+            var results = _companyProjectService.Detach(companyId, projectId);
+            if (results == null) return NotFound();
             return Ok(results);
         }
     }

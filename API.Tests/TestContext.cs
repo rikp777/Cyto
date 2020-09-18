@@ -12,6 +12,7 @@ namespace API.Tests
         {
             Companies = new TestDbSet<CompanyEntity>();
             Projects = new TestDbSet<ProjectEntity>();
+            Experiments = new TestDbSet<ExperimentEntity>();
         }
 
 

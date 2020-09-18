@@ -26,7 +26,7 @@ namespace API.Controllers.Company
         public IHttpActionResult GetAll()
         {
             var results = _companyService.GetAll();
-            if (results.ToArray().Length == 0) return Ok("There are no companies found");
+            if (results.Count == 0) return Ok("There are no companies found");
 
             return Ok(results);
         }
@@ -36,7 +36,7 @@ namespace API.Controllers.Company
         public IHttpActionResult GetById(int id)
         {
             var result = _companyService.GetById(id);
-            
+
             if (result == null) return NotFound();
             return Ok(result);
         }
@@ -71,7 +71,7 @@ namespace API.Controllers.Company
             var result = _companyService.Update(id, companyRequest);
             return Ok(result);
         }
-        
+
         //TODO:
         [HttpDelete]
         [Route("companies/{id}")]

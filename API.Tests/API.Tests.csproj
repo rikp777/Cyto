@@ -66,6 +66,7 @@
     <ItemGroup>
         <Compile Include="Company\CompanyProjectTest.cs" />
         <Compile Include="Company\CompanyTest.cs" />
+        <Compile Include="Experiment\ExperimentTest.cs" />
         <Compile Include="TestContext.cs" />
         <Compile Include="TestDbSet.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />

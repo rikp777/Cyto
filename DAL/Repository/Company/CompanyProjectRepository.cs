@@ -5,6 +5,7 @@ using System.Linq;
 using DAL.Context;
 using DAL.Repository.Interfaces;
 using Domain.Entities;
+using Domain.Resources;
 
 namespace DAL.Repository.Company
 {
@@ -21,34 +22,43 @@ namespace DAL.Repository.Company
             _dbSetProjects = context.Projects;
         }
 
-        public bool Attach(int companyId, int projectId)
+        public ProjectEntity Attach(int companyId, int projectId)
         {
             var company = _dbSetCompanies.Find(companyId);
             var project = _dbSetProjects.Find(projectId);
-            Console.WriteLine(company == null);
-            Console.WriteLine(project == null);
+            if (company == null || project == null)
+            {
+                return null;
+            }
 
-            company?.Projects.Add(project);
+            company.Projects.Add(project);
 
-            // _context.Entry(company).Collection<ProjectEntity>("Projects").IsModified = true;
-            return _context.Save();
+            _context.Save();
+            return project;
         }
 
-        public bool Detach(int companyId, int projectId)
+        public ProjectEntity Detach(int companyId, int projectId)
         {
             var company = _dbSetCompanies.Find(companyId);
-            var project = _dbSetProjects.Find(projectId);
+            var project = company?.Projects?.FirstOrDefault(p => p.Id == projectId);
+            if (project == null)
+            {
+                return null;
+            }
 
-            company?.Projects.Remove(project);
+            company.Projects.Remove(project);
 
-            return _context.Save();
+            _context.Save();
+            return project;
         }
 
         public ProjectEntity GetById(int companyId, int projectId)
         {
             var company = _dbSetCompanies.Find(companyId);
+            
+            
 
-            return company?.Projects?.First(p => p.Id == projectId);
+            return company?.Projects?.FirstOrDefault(p => p.Id == projectId);
         }
 
         public List<ProjectEntity> GetAll(int companyId)

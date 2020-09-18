@@ -1,4 +1,5 @@
 using System.Web.Http;
+using DAL.Context;
 using Domain.Requests;
 using LOGIC.Services.Experiment;
 
@@ -14,11 +15,17 @@ namespace API.Controllers.Experiment
             _experimentService = new ExperimentService();
         }
 
+        public ExperimentController(IDatabaseContext context)
+        {
+             _experimentService = new ExperimentService(context);
+        }
+
         [HttpGet]
         [Route("experiments")]
         public IHttpActionResult GetAll()
         {
             var results = _experimentService.GetAll();
+            if (results.ToArray().Length == 0) return Ok("There are no experiments found");
             return Ok(results);
         }
 

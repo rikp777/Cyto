@@ -18,7 +18,16 @@ namespace LOGIC.Services.Experiment
             _experimentRepository = new ExperimentRepository(new DatabaseContext());
         }
 
-        public ExperimentResource GetById(int id) => ExperimentResource.FromEntity(_experimentRepository.GetById(id));
+        public ExperimentService(IDatabaseContext context)
+        {
+            _experimentRepository = new ExperimentRepository(context);
+        }
+
+        public ExperimentResource GetById(int id)
+        {
+            var experimentEntity = _experimentRepository.GetById(id);
+            return experimentEntity == null ? null : ExperimentResource.FromEntity(experimentEntity);
+        }
 
         public List<ExperimentResource> GetAll() => _experimentRepository
             .GetAll()
