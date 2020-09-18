@@ -60,8 +60,6 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Audit\AuditChangeEntity.cs" />
-        <Compile Include="Audit\AuditChangeHistory.cs" />
         <Compile Include="Audit\AuditActionType.cs" />
         <Compile Include="Contracts\IBaseEntity.cs" />
         <Compile Include="Entities\AuditTrailChangeLogEntity.cs" />
@@ -80,6 +78,7 @@
         <Compile Include="Requests\ProjectRequest.cs" />
         <Compile Include="Requests\RoleRequest.cs" />
         <Compile Include="Requests\UserRequest.cs" />
+        <Compile Include="Resources\AuditTrailChangeLogResource.cs" />
         <Compile Include="Resources\AuditTrailResource.cs" />
         <Compile Include="Resources\CompanyResource.cs" />
         <Compile Include="Resources\ExperimentResource.cs" />

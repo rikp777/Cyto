@@ -70,8 +70,10 @@
         <Compile Include="Migrations\202009081318133_Initials.cs" />
         <Compile Include="Migrations\202009081318133_Initials.Designer.cs">
           <DependentUpon>202009081318133_Initials.cs</DependentUpon>
+
         </Compile>
         <Compile Include="Migrations\Configuration.cs" />
+        <Compile Include="Repository\AuditTrail\CompanyAuditTrailRepository.cs" />
         <Compile Include="Repository\AuditTrail\UserAuditTrailRepository.cs" />
         <Compile Include="Repository\Company\CompanyProjectRepository.cs" />
         <Compile Include="Repository\Company\CompanyRepository.cs" />
@@ -106,8 +108,8 @@
       </ProjectReference>
     </ItemGroup>
     <ItemGroup>
-      <EmbeddedResource Include="Migrations\202009081318133_Initials.resx">
-        <DependentUpon>202009081318133_Initials.cs</DependentUpon>
+      <EmbeddedResource Include="Migrations\202009100659329_AuditTrail.resx">
+        <DependentUpon>202009100659329_AuditTrail.cs</DependentUpon>
       </EmbeddedResource>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

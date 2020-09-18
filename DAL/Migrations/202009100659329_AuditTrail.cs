@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Initials : DbMigration
+    public partial class AuditTrail : DbMigration
     {
         public override void Up()
         {
@@ -28,10 +28,12 @@
                         Id = c.Int(nullable: false, identity: true),
                         TableName = c.String(),
                         CreatedAt = c.String(),
+                        ActionType = c.Int(nullable: false),
                         ServiceName = c.String(),
                         MethodName = c.String(),
                         MethodColor = c.String(),
                         IpAddress = c.String(),
+                        Reason = c.String(),
                         Company_Id = c.Int(),
                         Permission_Id = c.Int(),
                         User_Id = c.Int(),

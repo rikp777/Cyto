@@ -10,7 +10,7 @@ namespace DAL.Repository.Interfaces
         List<TEntity> GetAll( Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, 
             string includedProperties = "");
-        TEntity GetById(int id);
+        TEntity GetById(int id, List<string> includes = null);
 
         bool Create(TEntity entity);
         bool Update(int id, TEntity entity);

@@ -15,5 +15,7 @@ namespace Domain.Entities
         public virtual ICollection<ExperimentEntity > Experiments { get; set; }
         //Project has many Users
         public virtual ICollection<UserEntity > Users { get; set; }
+
+        public ProjectEntity() { }
     }
 }

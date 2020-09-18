@@ -15,5 +15,10 @@ namespace Domain.Requests
                 Description = entity.Description
             };
         }
+        
+        public override string ToString()
+        {
+            return Name + " " + Description;
+        }
     }
 }

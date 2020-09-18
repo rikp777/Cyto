@@ -43,9 +43,24 @@ namespace DAL.Repository
         }
 
 
-        public TEntity GetById(int id)
+        
+        
+        public TEntity GetById(
+            int id,
+            List<string> includes = null
+        )
         {
-            TEntity data = DbSet.Find(id);
+            var dbSet = _dbSet;
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    dbSet.Include(include);
+                }
+            }
+            TEntity data = dbSet.Find(id);
+            
             return data;
         }
 
@@ -83,14 +98,13 @@ namespace DAL.Repository
 
         public bool Update(int id, TEntity entityToUpdate)
         {
-            // _dbSet.Attach(entityToUpdate);
-            // var temp = _dbSet.First(u => u.Id == id);
-            // Console.WriteLine(temp);
-            // temp = entityToUpdate;
-            // _context.Entry(temp).Property(x=>x.Id).IsModified = false;
-            // _context.Entry(temp).State = EntityState.Modified;
 
-            // _context.Entry(entityToUpdate).State = EntityState.Modified;
+            var entity = _dbSet.Find(id);
+            if (entity == null) return false;
+            
+            _context.Entry(entity).CurrentValues.SetValues(entityToUpdate);
+
+
 
             // var entity = DbSet.Find(id);
             // if (entity == null) return false;

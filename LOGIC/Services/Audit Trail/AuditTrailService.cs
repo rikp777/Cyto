@@ -1,34 +1,30 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using DAL.Context;
-using DAL.Migrations;
 using DAL.Repository.AuditTrail;
+using Domain.Audit;
 using Domain.Entities;
-using Domain.Resources;
 
 namespace LOGIC.Services.Audit_Trail
 {
-    public class UserAuditTrail
+    public class AuditTrailService
     {
         private readonly UserAuditTrailRepository _userAuditTrailRepository;
-        public UserAuditTrail()
+        public AuditTrailService(DatabaseContext context)
         {
-            _userAuditTrailRepository = new UserAuditTrailRepository(new DatabaseContext());
+            _userAuditTrailRepository = new UserAuditTrailRepository(context);
         }
         
-        public AuditTrailResource GetById(int userId)
-        {
-            return null;
-        }
-
-
         public bool Capture<TEntity>(
             UserEntity user, 
             CompanyEntity company, 
             PermissionEntity permission,
+            AuditActionType auditAction,
             string serviceName,
             string methodName,
-            ref TEntity entity
+            TEntity entity,
+            List<AuditTrailChangeLogEntity> changes
         )
         {
             var auditTrail = new AuditTrailEntity()
@@ -42,12 +38,16 @@ namespace LOGIC.Services.Audit_Trail
 
                 CreatedAt = new DateTime().ToString(CultureInfo.InvariantCulture),
                 
+                ActionType = auditAction,
                 ServiceName = serviceName,
                 MethodName= methodName,
                 MethodColor = "Red",
                 
                 IpAddress = null,
             };
+            auditTrail.AuditTrailChangeLog = changes;
+
+            _userAuditTrailRepository.Create(auditTrail);
 
             return true;
         }

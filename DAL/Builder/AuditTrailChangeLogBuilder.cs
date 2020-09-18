@@ -11,6 +11,10 @@ namespace DAL.Builder
         {
             modelBuilder.ToTable(TableName);
             modelBuilder.HasKey(b => b.Id);
+            modelBuilder.Property(b => b.ColumnName);
+            modelBuilder.Property(b => b.ValueBefore);
+            modelBuilder.Property(b => b.ValueAfter);
+            modelBuilder.Ignore(b => b.Changed);
         }
     }
 }
