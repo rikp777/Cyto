@@ -9,22 +9,22 @@ namespace API.Controllers.Project
     public class ProjectController : ApiController
     {
         private readonly ProjectService _projectService;
-        
+
         public ProjectController()
         {
             _projectService = new ProjectService();
         }
-        
+
         [HttpGet]
         [Route("projects")]
         public IHttpActionResult GetAll()
         {
-            var results = _projectService.GetAll(1, 1);
+            var results = _projectService.GetAll();
             return Ok(results);
         }
 
         [HttpGet]
-        [Route("Permissions/{id}")]
+        [Route("projects/{id}")]
         public IHttpActionResult GetById(int id)
         {
             var result = _projectService.GetById(id);
@@ -33,7 +33,7 @@ namespace API.Controllers.Project
         }
 
         [HttpPost]
-        [Route("Permissions")]
+        [Route("projects")]
         public IHttpActionResult Create(ProjectRequest entity)
         {
             var result = _projectService.Create(entity);
@@ -41,7 +41,7 @@ namespace API.Controllers.Project
         }
 
         [HttpPut]
-        [Route("Permissions/{id}")]
+        [Route("projects/{id}")]
         public IHttpActionResult Update(int id, ProjectRequest entity)
         {
             var result = _projectService.Update(id, entity);
@@ -49,7 +49,7 @@ namespace API.Controllers.Project
         }
 
         [HttpDelete]
-        [Route("Permissions/{id}")]
+        [Route("projects/{id}")]
         public IHttpActionResult Delete(int id)
         {
             var result = _projectService.Delete(id);

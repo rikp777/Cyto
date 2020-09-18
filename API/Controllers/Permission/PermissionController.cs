@@ -9,22 +9,22 @@ namespace API.Controllers.Permission
     public class PermissionController : ApiController
     {
         private readonly PermissionService _permissionService;
-        
+
         public PermissionController()
         {
             _permissionService = new PermissionService();
         }
-        
+
         [HttpGet]
-        [Route("Permissions")]
+        [Route("permissions")]
         public IHttpActionResult GetAll()
         {
-            var results = _permissionService.GetAll(1, 1);
+            var results = _permissionService.GetAll();
             return Ok(results);
         }
 
         [HttpGet]
-        [Route("Permissions/{id}")]
+        [Route("permissions/{id}")]
         public IHttpActionResult GetById(int id)
         {
             var result = _permissionService.GetById(id);
@@ -33,7 +33,7 @@ namespace API.Controllers.Permission
         }
 
         [HttpPost]
-        [Route("Permissions")]
+        [Route("permissions")]
         public IHttpActionResult Create(PermissionRequest entity)
         {
             var result = _permissionService.Create(entity);
@@ -41,7 +41,7 @@ namespace API.Controllers.Permission
         }
 
         [HttpPut]
-        [Route("Permissions/{id}")]
+        [Route("permissions/{id}")]
         public IHttpActionResult Update(int id, PermissionRequest entity)
         {
             var result = _permissionService.Update(id, entity);
@@ -49,7 +49,7 @@ namespace API.Controllers.Permission
         }
 
         [HttpDelete]
-        [Route("Permissions/{id}")]
+        [Route("permissions/{id}")]
         public IHttpActionResult Delete(int id)
         {
             var result = _permissionService.Delete(id);

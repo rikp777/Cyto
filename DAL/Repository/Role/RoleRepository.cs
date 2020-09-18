@@ -6,7 +6,7 @@ namespace DAL.Repository
 {
     public class RoleRepository : GenericCrudRepository<RoleEntity>, IGenericCrudRepository<RoleEntity>
     {
-        public RoleRepository(DatabaseContext context) : base(context)
+        public RoleRepository(DatabaseContext context) : base(context, context.Roles)
         {
         }
     }

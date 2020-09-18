@@ -9,17 +9,17 @@ namespace API.Controllers.Role
     public class RoleController : ApiController
     {
         private readonly RoleService _roleService;
-        
+
         public RoleController()
         {
             _roleService = new RoleService();
         }
-        
+
         [HttpGet]
         [Route("roles")]
         public IHttpActionResult GetAll()
         {
-            var results = _roleService.GetAll(1, 1);
+            var results = _roleService.GetAll();
             return Ok(results);
         }
 

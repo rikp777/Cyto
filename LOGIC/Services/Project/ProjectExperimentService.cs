@@ -16,8 +16,8 @@ namespace LOGIC.Services.Project
             _projectExperimentRepository = new ProjectExperimentRepository(new DatabaseContext());
         }
 
-        public bool Attach(int projectId, int experimentId) => _projectExperimentRepository.Attach(projectId, experimentId);
-        public bool Detach(int projectId, int experimentId) => _projectExperimentRepository.Detach(projectId, experimentId);
+        public ExperimentResource Attach(int projectId, int experimentId) => ExperimentResource.FromEntity(_projectExperimentRepository.Attach(projectId, experimentId));
+        public ExperimentResource Detach(int projectId, int experimentId) => ExperimentResource.FromEntity(_projectExperimentRepository.Detach(projectId, experimentId));
         
         public ExperimentResource GetById(int projectId, int experimentId) => ExperimentResource.FromEntity(_projectExperimentRepository.GetById(projectId, experimentId));
         public List<ExperimentResource> GetAll(int projectId) => _projectExperimentRepository

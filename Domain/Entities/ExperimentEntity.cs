@@ -11,6 +11,7 @@ namespace Domain.Entities
         //Experiment has one project
         public virtual ProjectEntity Project { get; set; }
 
+
         public ExperimentEntity() { }
     }
 }

@@ -12,26 +12,27 @@ namespace LOGIC.Services.Project
     public class ProjectService : IGenericCrudService<ProjectResource, ProjectRequest>
     {
         private readonly ProjectRepository _projectRepository;
+
         public ProjectService()
         {
             _projectRepository = new ProjectRepository(new DatabaseContext());
         }
-        
+
         public ProjectResource GetById(int id) => ProjectResource.FromEntity(_projectRepository.GetById(id));
-        
-        public List<ProjectResource> GetAll(int size, int page) =>_projectRepository
-            .GetAll().Skip(size * (page -1)).Take(size)
+
+        public List<ProjectResource> GetAll() => _projectRepository
+            .GetAll()
             .Select(ProjectResource.FromEntity)
             .ToList();
 
         public bool Create(ProjectRequest entity) => _projectRepository
             .Create(ProjectRequest.ToEntity(entity));
-        
-        
-        public bool Update(int id, ProjectRequest entity) =>_projectRepository
+
+
+        public bool Update(int id, ProjectRequest entity) => _projectRepository
             .Update(id, ProjectRequest.ToEntity(entity));
-        
-        
+
+
         public bool Delete(int id) => _projectRepository
             .Delete(id);
     }

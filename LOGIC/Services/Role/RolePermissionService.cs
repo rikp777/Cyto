@@ -16,8 +16,8 @@ namespace LOGIC.Services.Role
             _rolePermissionRepository = new RolePermissionRepository(new DatabaseContext());
         }
         
-        public bool Attach(int roleId, int permissionId) => _rolePermissionRepository.Attach(roleId, permissionId);
-        public bool Detach(int roleId, int permissionId) => _rolePermissionRepository.Detach(roleId, permissionId);
+        public PermissionResource Attach(int roleId, int permissionId) => PermissionResource.FromEntity(_rolePermissionRepository.Attach(roleId, permissionId));
+        public PermissionResource Detach(int roleId, int permissionId) => PermissionResource.FromEntity(_rolePermissionRepository.Detach(roleId, permissionId));
         
         public PermissionResource GetById(int roleId, int permissionId) => PermissionResource.FromEntity(_rolePermissionRepository.GetById(roleId, permissionId));
         public List<PermissionResource> GetAll(int roleId) => _rolePermissionRepository.GetAll(roleId).Select(PermissionResource.FromEntity).ToList();

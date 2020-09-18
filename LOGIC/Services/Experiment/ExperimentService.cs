@@ -17,6 +17,7 @@ namespace LOGIC.Services.Experiment
     public class ExperimentService : IGenericCrudService<ExperimentResource, ExperimentRequest>
     {
         private readonly ExperimentRepository _experimentRepository;
+
         private readonly CompanyRepository _companyRepository;
         private readonly AuditTrailService _auditTrailService;
         private readonly UserRepository _userRepository;
@@ -31,11 +32,22 @@ namespace LOGIC.Services.Experiment
             _experimentRepository = new ExperimentRepository(context);
         }
 
-        public ExperimentResource GetById(int id) => ExperimentResource.FromEntity(_experimentRepository.GetById(id));
-        public List<ExperimentResource> GetAll(int size, int page) =>_experimentRepository
-            .GetAll().Skip(size * (page -1)).Take(size)
+        public ExperimentService(IDatabaseContext context)
+        {
+            _experimentRepository = new ExperimentRepository(context);
+        }
+
+        public ExperimentResource GetById(int id)
+        {
+            var experimentEntity = _experimentRepository.GetById(id);
+            return experimentEntity == null ? null : ExperimentResource.FromEntity(experimentEntity);
+        }
+
+        public List<ExperimentResource> GetAll() => _experimentRepository
+            .GetAll()
             .Select(ExperimentResource.FromEntity)
             .ToList();
+
 
         public bool Create(ExperimentRequest entity) => _experimentRepository.Create(ExperimentRequest.ToEntity(entity));
         public bool Update(int id, ExperimentRequest entity)
