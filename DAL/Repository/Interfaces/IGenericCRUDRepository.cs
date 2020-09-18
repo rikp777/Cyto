@@ -15,6 +15,5 @@ namespace DAL.Repository.Interfaces
         bool Create(TEntity entity);
         bool Update(int id, TEntity entity);
         bool Delete(int id);
-        bool Save();
     }
 }

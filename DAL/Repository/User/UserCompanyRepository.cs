@@ -27,7 +27,7 @@ namespace DAL.Repository.User
 
             user?.Companies.Add(company);
 
-            _context.Save();
+            _context.SaveChanges();
             return company;
         }
 
@@ -38,7 +38,7 @@ namespace DAL.Repository.User
 
             user?.Companies.Remove(company);
 
-            _context.Save();
+            _context.SaveChanges();
             return company;
         }
 

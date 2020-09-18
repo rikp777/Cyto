@@ -9,5 +9,10 @@ namespace DAL.Repository.Permission
         public PermissionRepository(DatabaseContext context) : base(context, context.Permissions)
         {
         }
+
+        public bool Save()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

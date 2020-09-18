@@ -1,6 +1,7 @@
 using System;
 using System.Data.Entity;
 using DAL.Context;
+using DAL.Interfaces;
 using Domain.Contracts;
 using Domain.Entities;
 
@@ -24,6 +25,15 @@ namespace API.Tests
         public DbSet<ProjectEntity> Projects { get; set; }
         public DbSet<AuditTrailEntity> AuditTrails { get; set; }
         public DbSet<AuditTrailChangeLogEntity> AuditTrailChangeLogs { get; set; }
+        public int SaveChanges()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int SaveChanges(UserEntity user, CompanyEntity company)
+        {
+            throw new NotImplementedException();
+        }
 
         public bool Save()
         {

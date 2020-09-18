@@ -28,7 +28,7 @@ namespace DAL.Repository.User
 
             user?.Projects.Add(project);
 
-            _context.Save();
+            _context.SaveChanges();
             return project;
         }
 
@@ -39,7 +39,7 @@ namespace DAL.Repository.User
 
             user?.Projects.Remove(project);
 
-            _context.Save();
+            _context.SaveChanges();
             return project;
         }
 

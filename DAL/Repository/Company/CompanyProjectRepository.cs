@@ -1,8 +1,7 @@
-
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using DAL.Context;
+using DAL.Interfaces;
 using DAL.Repository.Interfaces;
 using Domain.Entities;
 
@@ -32,7 +31,7 @@ namespace DAL.Repository.Company
 
             company.Projects.Add(project);
 
-            _context.Save();
+            _context.SaveChanges();
             return project;
         }
 
@@ -47,7 +46,7 @@ namespace DAL.Repository.Company
 
             company.Projects.Remove(project);
 
-            _context.Save();
+            _context.SaveChanges();
             return project;
         }
 

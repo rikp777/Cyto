@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using DAL.Context;
+using DAL.Interfaces;
 using DAL.Repository.Company;
 using DAL.Repository.Experiment;
 using DAL.Repository.User;

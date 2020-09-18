@@ -27,7 +27,7 @@ namespace DAL.Repository.User
 
             user?.Roles.Add(role);
 
-            _context.Save();
+            _context.SaveChanges();
             return role;
         }
 
@@ -39,7 +39,7 @@ namespace DAL.Repository.User
 
             user?.Roles.Remove(role);
 
-            _context.Save();
+            _context.SaveChanges();
             return role;
         }
 

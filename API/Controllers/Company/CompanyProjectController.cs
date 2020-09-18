@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Web.Http;
 using DAL.Context;
+using DAL.Interfaces;
 using LOGIC.Services.Company;
 using LOGIC.Services.User;
 
@@ -14,14 +15,14 @@ namespace API.Controllers.Company
 
         public CompanyProjectController()
         {
-            _companyProjectService = new CompanyProjectService();
+            _companyProjectService = new CompanyProjectService(new DatabaseContext());
         }
-
         public CompanyProjectController(IDatabaseContext context)
         {
             _companyProjectService = new CompanyProjectService(context);
         }
 
+        
         [HttpGet]
         [Route("{companyId}/projects")]
         public IHttpActionResult GetAll(int companyId)

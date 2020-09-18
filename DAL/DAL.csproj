@@ -67,6 +67,7 @@
         <Compile Include="Context\DatabaseContext.cs" />
         <Compile Include="Context\DatabaseContextAuditTrail.cs" />
         <Compile Include="Context\DatabaseContextSeed.cs" />
+        <Compile Include="Interfaces\IDatabaseContext.cs" />
         <Compile Include="Migration Guid\Configuration.cs" />
         <Compile Include="Migrations\202009181326010_add.cs" />
         <Compile Include="Migrations\202009181326010_add.Designer.cs">

@@ -1,5 +1,5 @@
-using System.Linq;
-using DAL.Context;
+using System.Data.Entity;
+using DAL.Interfaces;
 using DAL.Repository.Interfaces;
 using Domain.Entities;
 
@@ -28,6 +28,11 @@ namespace DAL.Repository.Company
             // Context.Entry(temp).Property(x => x.Description).IsModified = true;
             Context.MarkAsModified(temp);
             return Context.Save();
+        }
+
+        public bool Save()
+        {
+            throw new System.NotImplementedException();
         }
 
         public CompanyEntity GetByName(string name)

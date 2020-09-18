@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DAL.Context;
+using DAL.Interfaces;
 using DAL.Repository.Company;
 using Domain.Resources;
 using LOGIC.Services.Interfaces;

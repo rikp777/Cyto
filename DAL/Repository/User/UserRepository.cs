@@ -1,5 +1,7 @@
+using System.Data.Entity;
 using System.Linq;
 using DAL.Context;
+using DAL.Interfaces;
 using DAL.Repository.Interfaces;
 using Domain.Entities;
 

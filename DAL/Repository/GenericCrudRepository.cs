@@ -4,7 +4,9 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using DAL.Context;
+using DAL.Interfaces;
 using DAL.Repository.Interfaces;
+using Domain.Contracts;
 using Domain.Entities;
 using TrackerEnabledDbContext.Common.Interfaces;
 
@@ -71,7 +73,7 @@ namespace DAL.Repository
             _dbSet.Add(entity);
 
             // return Save();
-            return Context.Save();
+            return _context.SaveChanges() > 1;
         }
 
 
@@ -80,7 +82,7 @@ namespace DAL.Repository
             var entityToDelete = _dbSet.Find(id);
             Delete(entityToDelete);
             // return Save();
-            return Context.Save();
+            return _context.SaveChanges() > 1;
         }
 
 

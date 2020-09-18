@@ -1,6 +1,7 @@
 using System;
 using System.Web.Http;
 using DAL.Context;
+using DAL.Interfaces;
 using Domain.Requests;
 using LOGIC.Services.Company;
 
@@ -13,7 +14,7 @@ namespace API.Controllers.Company
 
         public CompanyController()
         {
-            _companyService = new CompanyService();
+            _companyService = new CompanyService(new DatabaseContext());
         }
 
         public CompanyController(IDatabaseContext context)

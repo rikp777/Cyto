@@ -1,8 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Globalization;
 using System.Linq;
 using DAL.Builder;
+using DAL.Interfaces;
+using Domain.Audit;
 using Domain.Contracts;
 using Domain.Entities;
 using TrackerEnabledDbContext;
@@ -28,11 +34,6 @@ namespace DAL.Context
         public DbSet<AuditTrailEntity> AuditTrails { get; set; }
         public DbSet<AuditTrailChangeLogEntity> AuditTrailChangeLogs { get; set; }
         
-        public bool Save()
-        {
-            var saved = SaveChanges();
-            return saved > 0;
-        }
         public void MarkAsModified(BaseEntity entity)
         {
             Entry(entity).State = EntityState.Modified;
@@ -46,8 +47,10 @@ namespace DAL.Context
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-            modelBuilder.Conventions.Add<OneToManyCascadeDeleteConvention>();
+            modelBuilder.Conventions.Add<OneToManyCascadeDeleteConvention>(
+                );
             var userBuilder = new UserBuilder(modelBuilder.Entity<UserEntity>());
             var roleBuilder = new RoleBuilder(modelBuilder.Entity<RoleEntity>());
             var companyBuilder = new CompanyBuilder(modelBuilder.Entity<CompanyEntity>());
@@ -189,11 +192,6 @@ namespace DAL.Context
         {
             AuditTrail(user, company);
             return SaveChanges();
-        }
-
-        public override int SaveChanges()
-        {
-            return base.SaveChanges();
         }
     }
 }

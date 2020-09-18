@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DAL.Context;
+using DAL.Interfaces;
 using DAL.Repository.Company;
 using DAL.Repository.User;
 using Domain.Audit;
@@ -17,22 +18,18 @@ namespace LOGIC.Services.Company
     public class CompanyService : IGenericCrudService<CompanyResource, CompanyRequest>
     {
         private readonly CompanyRepository _companyRepository;
-
-        public CompanyService(IDatabaseContext dbContext)
-        {
-            _companyRepository = new CompanyRepository(dbContext);
-        }
-        
         private readonly AuditTrailService _auditTrailService;
         private readonly UserRepository _userRepository;
-        public CompanyService()
+        
+        public CompanyService(IDatabaseContext context)
         {
-            DatabaseContext context = new DatabaseContext();
             _companyRepository = new CompanyRepository(context);
             _auditTrailService = new AuditTrailService(context);
             _userRepository = new UserRepository(context);
         }
         
+ 
+
 
         public CompanyResource GetById(int id)
         {
