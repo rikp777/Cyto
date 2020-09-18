@@ -17,5 +17,5 @@ namespace DAL.Migrations
             base.Seed(context);
             DatabaseContextSeed.Seed(context);
         }
-    } 
+    }
 }

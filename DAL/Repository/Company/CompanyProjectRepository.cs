@@ -10,49 +10,60 @@ namespace DAL.Repository.Company
 {
     public class CompanyProjectRepository : IGenericRelationshipRepository<ProjectEntity>
     {
-        private readonly DatabaseContext _context;
+        private readonly IDatabaseContext _context;
         private readonly DbSet<CompanyEntity> _dbSetCompanies;
         private readonly DbSet<ProjectEntity> _dbSetProjects;
 
-        public CompanyProjectRepository(DatabaseContext context)
+        public CompanyProjectRepository(IDatabaseContext context)
         {
             _context = context;
-            _dbSetCompanies = context.Set<CompanyEntity>();
-            _dbSetProjects = context.Set<ProjectEntity>();
+            _dbSetCompanies = context.Companies;
+            _dbSetProjects = context.Projects;
         }
-        
-        public bool Attach(int companyId, int projectId)
+
+        public ProjectEntity Attach(int companyId, int projectId)
         {
             var company = _dbSetCompanies.Find(companyId);
             var project = _dbSetProjects.Find(projectId);
+            if (company == null || project == null)
+            {
+                return null;
+            }
 
-            company?.Projects.Add(project);
+            company.Projects.Add(project);
 
-            return _context.SaveChanges() > 0;
+            _context.Save();
+            return project;
         }
 
-        public bool Detach(int companyId, int projectId)
+        public ProjectEntity Detach(int companyId, int projectId)
         {
             var company = _dbSetCompanies.Find(companyId);
-            var project = _dbSetProjects.Find(projectId);
+            var project = company?.Projects?.FirstOrDefault(p => p.Id == projectId);
+            if (project == null)
+            {
+                return null;
+            }
 
-            company?.Projects.Remove(project);
+            company.Projects.Remove(project);
 
-            return _context.SaveChanges() > 0;
+            _context.Save();
+            return project;
         }
 
         public ProjectEntity GetById(int companyId, int projectId)
         {
             var company = _dbSetCompanies.Find(companyId);
+            
+            
 
-            return company?.Projects.First(p => p.Id == projectId);
+            return company?.Projects?.FirstOrDefault(p => p.Id == projectId);
         }
 
         public List<ProjectEntity> GetAll(int companyId)
         {
             var company = _dbSetCompanies.Find(companyId);
-
-            return company?.Projects.ToList();
+            return company?.Projects?.ToList();
         }
     }
 }

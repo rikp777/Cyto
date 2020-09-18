@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using DAL.Context;
 using DAL.Repository.Company;
 using DAL.Repository.Experiment;
 using DAL.Repository.User;
+using Domain.Audit;
 using Domain.Entities;
 using Domain.Requests;
 using Domain.Resources;
@@ -26,26 +28,27 @@ namespace LOGIC.Services.Experiment
             _userRepository = new UserRepository(context);
             _companyRepository = new CompanyRepository(context);
             _auditTrailService = new AuditTrailService(context);
-            
+
             _experimentRepository = new ExperimentRepository(context);
         }
 
-        public ExperimentResource GetById(int id) => ExperimentResource.FromEntity(_experimentRepository.GetById(id));
-        public List<ExperimentResource> GetAll(int size, int page) =>_experimentRepository
+        public ExperimentService(IDatabaseContext context)
+        {
+            _experimentRepository = new ExperimentRepository(context);
+        }
+
+        public ExperimentResource GetById(int id)
+        {
+            var experimentEntity = _experimentRepository.GetById(id);
+            return experimentEntity == null ? null : ExperimentResource.FromEntity(experimentEntity);
+        }
+
+        public List<ExperimentResource> GetAll(int size, int page) => _experimentRepository
             .GetAll().Skip(size * (page -1)).Take(size)
             .Select(ExperimentResource.FromEntity)
             .ToList();
 
-        public bool Create(ExperimentRequest entity)
-        {
-            var user = _userRepository.GetById(2);
-            var company = _companyRepository.GetById(1);
-            
-            _experimentRepository.Create(ExperimentRequest.ToEntity(entity));
-            _experimentRepository.Save(user, company);
-            
-            return true;
-        } 
+        public bool Create(ExperimentRequest entity) => _experimentRepository.Create(ExperimentRequest.ToEntity(entity));
         public bool Update(int id, ExperimentRequest entity)
         {
             var user = _userRepository.GetById(2);

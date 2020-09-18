@@ -20,25 +20,27 @@ namespace DAL.Repository.User
             _dbSetRoles = context.Set<RoleEntity>();
         }
 
-        public bool Attach(int userId, int roleId)
+        public RoleEntity Attach(int userId, int roleId)
         {
             var user = _dbSetUsers.Find(userId);
             var role = _dbSetRoles.Find(roleId);
 
             user?.Roles.Add(role);
 
-            return _context.SaveChanges() > 0;
+            _context.Save();
+            return role;
         }
 
 
-        public bool Detach(int userId, int roleId)
+        public RoleEntity Detach(int userId, int roleId)
         {
             var user = _dbSetUsers.Find(userId);
             var role = _dbSetRoles.Find(roleId);
 
             user?.Roles.Remove(role);
 
-            return _context.SaveChanges() > 0;
+            _context.Save();
+            return role;
         }
 
         public RoleEntity GetById(int userId, int roleId)

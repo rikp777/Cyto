@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Web.Http;
+using DAL.Context;
 using Domain.Requests;
 using LOGIC.Services.Experiment;
 
@@ -9,22 +10,28 @@ namespace API.Controllers.Experiment
     public class ExperimentController : ApiController
     {
         private readonly ExperimentService _experimentService;
-        
+
         public ExperimentController()
         {
             _experimentService = new ExperimentService();
         }
-        
+
+        public ExperimentController(IDatabaseContext context)
+        {
+             _experimentService = new ExperimentService(context);
+        }
+
         [HttpGet]
-        [Route("Experiments")]
+        [Route("experiments")]
         public IHttpActionResult GetAll()
         {
-            var results = _experimentService.GetAll(1, 1);
+            var results = _experimentService.GetAll();
+            if (results.ToArray().Length == 0) return Ok("There are no experiments found");
             return Ok(results);
         }
 
         [HttpGet]
-        [Route("Experiments/{id}")]
+        [Route("experiments/{id}")]
         public IHttpActionResult GetById(int id)
         {
             var result = _experimentService.GetById(id);
@@ -33,7 +40,7 @@ namespace API.Controllers.Experiment
         }
 
         [HttpPost]
-        [Route("Experiments")]
+        [Route("experiments")]
         public IHttpActionResult Create(ExperimentRequest entity)
         {
             var result = _experimentService.Create(entity);
@@ -41,7 +48,7 @@ namespace API.Controllers.Experiment
         }
 
         [HttpPut]
-        [Route("Experiments/{id}")]
+        [Route("experiments/{id}")]
         public IHttpActionResult Update(int id, ExperimentRequest entity)
         {
             var result = _experimentService.Update(id, entity);
@@ -49,7 +56,7 @@ namespace API.Controllers.Experiment
         }
 
         [HttpDelete]
-        [Route("Experiments/{id}")]
+        [Route("experiments/{id}")]
         public IHttpActionResult Delete(int id)
         {
             var result = _experimentService.Delete(id);

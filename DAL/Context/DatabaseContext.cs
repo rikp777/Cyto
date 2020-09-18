@@ -1,21 +1,16 @@
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Core.Objects.DataClasses;
-using System.Data.Entity.Infrastructure;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Globalization;
 using System.Linq;
 using DAL.Builder;
-using Domain.Audit;
+using Domain.Contracts;
 using Domain.Entities;
 using TrackerEnabledDbContext;
 using TrackerEnabledDbContext.Common.Interfaces;
 
 namespace DAL.Context
 {
-    public class DatabaseContext : DbContext
+    public class DatabaseContext : DbContext, IDatabaseContext
     {
         public DatabaseContext() : base("DefaultConnection")
         {
@@ -33,11 +28,26 @@ namespace DAL.Context
         public DbSet<AuditTrailEntity> AuditTrails { get; set; }
         public DbSet<AuditTrailChangeLogEntity> AuditTrailChangeLogs { get; set; }
         
+        public bool Save()
+        {
+            var saved = SaveChanges();
+            return saved > 0;
+        }
+        public void MarkAsModified(BaseEntity entity)
+        {
+            Entry(entity).State = EntityState.Modified;
+        }
+
+        public EntityState GetState(BaseEntity entity)
+        {
+            return Entry(entity).State;
+        }
+        
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-
+            modelBuilder.Conventions.Add<OneToManyCascadeDeleteConvention>();
             var userBuilder = new UserBuilder(modelBuilder.Entity<UserEntity>());
             var roleBuilder = new RoleBuilder(modelBuilder.Entity<RoleEntity>());
             var companyBuilder = new CompanyBuilder(modelBuilder.Entity<CompanyEntity>());

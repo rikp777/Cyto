@@ -10,16 +10,17 @@ using TrackerEnabledDbContext.Common.Interfaces;
 
 namespace DAL.Repository
 {
-    public abstract class GenericCrudRepository<TEntity> where TEntity : class 
+    public abstract class GenericCrudRepository<TEntity> where TEntity : BaseEntity
     {
-        private readonly DatabaseContext _context;
-        private readonly DbSet<TEntity> _dbSet;
+        protected readonly IDatabaseContext _context;
+        protected readonly DbSet<TEntity> _dbSet;
 
-        protected GenericCrudRepository(DatabaseContext context)
+        protected GenericCrudRepository(IDatabaseContext context, DbSet<TEntity> dbSet)
         {
-            _context = context;
-            _dbSet = context.Set<TEntity>();
+            this._context = context;
+            this._dbSet = dbSet;
         }
+
 
         public List<TEntity> GetAll(
             Expression<Func<TEntity, bool>> filter = null,
@@ -33,13 +34,15 @@ namespace DAL.Repository
                 query = query.Where(filter);
             }
 
-            foreach (var includeProperty in includedProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (var includeProperty in includedProperties.Split(new char[] {','},
+                StringSplitOptions.RemoveEmptyEntries))
             {
                 query = query.Include(includedProperties);
             }
 
             return orderBy != null ? orderBy(query).ToList() : query.ToList();
         }
+
 
         
         
@@ -62,57 +65,57 @@ namespace DAL.Repository
             return data;
         }
 
-        
-        
+
         public bool Create(TEntity entity)
         {
             _dbSet.Add(entity);
 
-            return true;
+            // return Save();
+            return Context.Save();
         }
 
-        
-        
+
         public bool Delete(int id)
         {
             var entityToDelete = _dbSet.Find(id);
             Delete(entityToDelete);
-            return true;
+            // return Save();
+            return Context.Save();
         }
 
-        
-        
-        public bool Delete(TEntity entityToDelete)
+
+        private void Delete(TEntity entityToDelete)
         {
-            if (_context.Entry(entityToDelete).State == EntityState.Detached)
+            if (_context.GetState(entityToDelete) == EntityState.Detached)
             {
                 _dbSet.Attach(entityToDelete);
             }
 
             _dbSet.Remove(entityToDelete);
-            return true;
+            // return Save();
         }
 
         
         
         public bool Update(int id, TEntity entityToUpdate)
         {
+
             var entity = _dbSet.Find(id);
             if (entity == null) return false;
             
             _context.Entry(entity).CurrentValues.SetValues(entityToUpdate);
 
-            return true;
+            return Save();
+            // _dbSet.Attach(entityToUpdate);
+            // _context.Entry(entityToUpdate).State = EntityState.Modified;
+            //
+            // return Save();
         }
 
-        public bool Save()
+        private bool Save()
         {
-            return _context.SaveChanges() > 0;
-        }
-
-        public bool Save(UserEntity user, CompanyEntity company)
-        {
-            return _context.SaveChanges(user, company) > 0;
+            var saved = _context.SaveChanges();
+            return saved > 0;
         }
     }
 }

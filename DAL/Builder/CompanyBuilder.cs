@@ -13,6 +13,7 @@ namespace DAL.Builder
             modelBuilder.HasKey(b => b.Id);
             modelBuilder.Property(b => b.Name).IsRequired().HasMaxLength(250);
             modelBuilder.Property(b => b.Description).IsRequired().HasMaxLength(500);
+            // modelBuilder.HasRequired(b => b.Projects).WithMany().WillCascadeOnDelete();
         }
     }
 }

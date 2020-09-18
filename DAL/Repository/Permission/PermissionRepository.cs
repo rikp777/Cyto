@@ -6,7 +6,7 @@ namespace DAL.Repository.Permission
 {
     public class PermissionRepository : GenericCrudRepository<PermissionEntity>, IGenericCrudRepository<PermissionEntity>
     {
-        public PermissionRepository(DatabaseContext context) : base(context)
+        public PermissionRepository(DatabaseContext context) : base(context, context.Permissions)
         {
         }
     }

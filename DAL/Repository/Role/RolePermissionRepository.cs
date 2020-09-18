@@ -19,24 +19,27 @@ namespace DAL.Repository
             this._dbSetRoles = context.Set<RoleEntity>();
             this._dbSetPermissions = context.Set<PermissionEntity>();
         }
-        public bool Attach(int roleId, int permissionId)
+
+        public PermissionEntity Attach(int roleId, int permissionId)
         {
             var role = _dbSetRoles.Find(roleId);
             var permission = _dbSetPermissions.Find(permissionId);
 
             role?.Permissions.Add(permission);
 
-            return _context.SaveChanges() > 0;
+            _context.Save();
+            return permission;
         }
 
-        public bool Detach(int roleId, int permissionId)
+        public PermissionEntity Detach(int roleId, int permissionId)
         {
             var role = _dbSetRoles.Find(roleId);
             var permission = _dbSetPermissions.Find(permissionId);
 
             role?.Permissions.Remove(permission);
 
-            return _context.SaveChanges() > 0;
+            _context.Save();
+            return permission;
         }
 
         public PermissionEntity GetById(int roleId, int permissionId)

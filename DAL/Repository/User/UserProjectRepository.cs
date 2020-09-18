@@ -21,24 +21,26 @@ namespace DAL.Repository.User
         }
 
 
-        public bool Attach(int userId, int projectId)
+        public ProjectEntity Attach(int userId, int projectId)
         {
             var user = _dbSetUsers.Find(userId);
             var project = _dbSetProjects.Find(projectId);
 
             user?.Projects.Add(project);
 
-            return _context.SaveChanges() > 0;
+            _context.Save();
+            return project;
         }
 
-        public bool Detach(int userId, int projectId)
+        public ProjectEntity Detach(int userId, int projectId)
         {
             var user = _dbSetUsers.Find(userId);
             var project = _dbSetProjects.Find(projectId);
 
             user?.Projects.Remove(project);
 
-            return _context.SaveChanges() > 0;
+            _context.Save();
+            return project;
         }
 
         public ProjectEntity GetById(int userId, int projectId)
