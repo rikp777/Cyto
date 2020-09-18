@@ -28,7 +28,7 @@ namespace DAL.Repository.User
 
             user?.Projects.Add(project);
 
-            return _context.Save();
+            return _context.SaveChanges() > 0;
         }
 
         public bool Detach(int userId, int projectId)
@@ -38,7 +38,7 @@ namespace DAL.Repository.User
 
             user?.Projects.Remove(project);
 
-            return _context.Save();
+            return _context.SaveChanges() > 0;
         }
 
         public ProjectEntity GetById(int userId, int projectId)

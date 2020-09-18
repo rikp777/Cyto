@@ -27,7 +27,7 @@ namespace DAL.Repository.User
 
             user?.Roles.Add(role);
 
-            return _context.Save();
+            return _context.SaveChanges() > 0;
         }
 
 
@@ -38,7 +38,7 @@ namespace DAL.Repository.User
 
             user?.Roles.Remove(role);
 
-            return _context.Save();
+            return _context.SaveChanges() > 0;
         }
 
         public RoleEntity GetById(int userId, int roleId)

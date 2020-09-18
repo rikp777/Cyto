@@ -65,14 +65,12 @@
         <Compile Include="Builder\RoleBuilder.cs" />
         <Compile Include="Builder\UserBuilder.cs" />
         <Compile Include="Context\DatabaseContext.cs" />
+        <Compile Include="Context\DatabaseContextAuditTrail.cs" />
         <Compile Include="Context\DatabaseContextSeed.cs" />
-        <Compile Include="Migrations\202009100659329_AuditTrail.cs" />
-        <Compile Include="Migrations\202009100659329_AuditTrail.Designer.cs">
-          <DependentUpon>202009100659329_AuditTrail.cs</DependentUpon>
-        </Compile>
-        <Compile Include="Migrations\202009150835495_PrimaryKey.cs" />
-        <Compile Include="Migrations\202009150835495_PrimaryKey.Designer.cs">
-          <DependentUpon>202009150835495_PrimaryKey.cs</DependentUpon>
+        <Compile Include="Migration Guid\Configuration.cs" />
+        <Compile Include="Migrations\202009181326010_add.cs" />
+        <Compile Include="Migrations\202009181326010_add.Designer.cs">
+          <DependentUpon>202009181326010_add.cs</DependentUpon>
         </Compile>
         <Compile Include="Migrations\Configuration.cs" />
         <Compile Include="Repository\AuditTrail\AuditTrailRepository.cs" />
@@ -84,6 +82,7 @@
         <Compile Include="Repository\GenericCrudRepository.cs" />
         <Compile Include="Repository\Interfaces\IGenericCRUDRepository.cs" />
         <Compile Include="Repository\Interfaces\IGenericRelationshipRepository.cs" />
+        <Compile Include="Repository\Interfaces\ISaveTypes.cs" />
         <Compile Include="Repository\Permission\PermissionRepository.cs" />
         <Compile Include="Repository\Project\ProjectExperimentRepository.cs" />
         <Compile Include="Repository\Project\ProjectRepository.cs" />
@@ -111,11 +110,8 @@
       </ProjectReference>
     </ItemGroup>
     <ItemGroup>
-      <EmbeddedResource Include="Migrations\202009100659329_AuditTrail.resx">
-        <DependentUpon>202009100659329_AuditTrail.cs</DependentUpon>
-      </EmbeddedResource>
-      <EmbeddedResource Include="Migrations\202009150835495_PrimaryKey.resx">
-        <DependentUpon>202009150835495_PrimaryKey.cs</DependentUpon>
+      <EmbeddedResource Include="Migrations\202009181326010_add.resx">
+        <DependentUpon>202009181326010_add.cs</DependentUpon>
       </EmbeddedResource>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

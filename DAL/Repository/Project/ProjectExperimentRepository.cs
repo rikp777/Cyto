@@ -28,7 +28,7 @@ namespace DAL.Repository.Project
 
             project?.Experiments.Add(experiment);
 
-            return _context.Save();
+            return _context.SaveChanges() > 0;
         }
 
         public bool Detach(int projectId, int experimentId)
@@ -38,7 +38,7 @@ namespace DAL.Repository.Project
 
             project?.Experiments.Remove(experiment);
 
-            return _context.Save();
+            return _context.SaveChanges() > 0;
         }
 
         public ExperimentEntity GetById(int projectId, int experimentId)

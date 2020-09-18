@@ -26,7 +26,7 @@ namespace DAL.Repository
 
             role?.Permissions.Add(permission);
 
-            return _context.Save();
+            return _context.SaveChanges() > 0;
         }
 
         public bool Detach(int roleId, int permissionId)
@@ -36,7 +36,7 @@ namespace DAL.Repository
 
             role?.Permissions.Remove(permission);
 
-            return _context.Save();
+            return _context.SaveChanges() > 0;
         }
 
         public PermissionEntity GetById(int roleId, int permissionId)

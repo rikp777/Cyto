@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class AuditTrail : DbMigration
+    public partial class add : DbMigration
     {
         public override void Up()
         {
@@ -27,6 +27,7 @@
                     {
                         Id = c.Int(nullable: false, identity: true),
                         TableName = c.String(),
+                        PrimaryKey = c.String(),
                         CreatedAt = c.String(),
                         ActionType = c.Int(nullable: false),
                         ServiceName = c.String(),
@@ -34,17 +35,17 @@
                         MethodColor = c.String(),
                         IpAddress = c.String(),
                         Reason = c.String(),
+                        User_Id = c.Int(),
                         Company_Id = c.Int(),
                         Permission_Id = c.Int(),
-                        User_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.User", t => t.User_Id)
                 .ForeignKey("dbo.Company", t => t.Company_Id)
                 .ForeignKey("dbo.Permission", t => t.Permission_Id)
-                .ForeignKey("dbo.User", t => t.User_Id)
+                .Index(t => t.User_Id)
                 .Index(t => t.Company_Id)
-                .Index(t => t.Permission_Id)
-                .Index(t => t.User_Id);
+                .Index(t => t.Permission_Id);
             
             CreateTable(
                 "dbo.Company",
@@ -169,7 +170,6 @@
         
         public override void Down()
         {
-            DropForeignKey("dbo.AuditTrail", "User_Id", "dbo.User");
             DropForeignKey("dbo.AuditTrail", "Permission_Id", "dbo.Permission");
             DropForeignKey("dbo.AuditTrail", "Company_Id", "dbo.Company");
             DropForeignKey("dbo.UserRole", "RoleId", "dbo.Role");
@@ -180,6 +180,7 @@
             DropForeignKey("dbo.UserProject", "UserId", "dbo.User");
             DropForeignKey("dbo.UserCompany", "CompanyId", "dbo.Company");
             DropForeignKey("dbo.UserCompany", "UserId", "dbo.User");
+            DropForeignKey("dbo.AuditTrail", "User_Id", "dbo.User");
             DropForeignKey("dbo.Experiment", "Project_Id", "dbo.Project");
             DropForeignKey("dbo.Project", "Company_Id", "dbo.Company");
             DropForeignKey("dbo.AuditTrailChangeLog", "AuditTrailEntity_Id", "dbo.AuditTrail");
@@ -194,9 +195,9 @@
             DropIndex("dbo.User", new[] { "Id" });
             DropIndex("dbo.Experiment", new[] { "Project_Id" });
             DropIndex("dbo.Project", new[] { "Company_Id" });
-            DropIndex("dbo.AuditTrail", new[] { "User_Id" });
             DropIndex("dbo.AuditTrail", new[] { "Permission_Id" });
             DropIndex("dbo.AuditTrail", new[] { "Company_Id" });
+            DropIndex("dbo.AuditTrail", new[] { "User_Id" });
             DropIndex("dbo.AuditTrailChangeLog", new[] { "AuditTrailEntity_Id" });
             DropTable("dbo.UserRole");
             DropTable("dbo.RolePermission");

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Audit;
 using Domain.Contracts;
 
@@ -8,7 +9,9 @@ namespace Domain.Entities
     public class AuditTrailEntity : BaseEntity
     {
         public CompanyEntity Company { get; set; }
-        public UserEntity User { get; set; }
+        // [ForeignKey("asd")]
+        // public string UserId { get; set; }    
+        public virtual UserEntity User { get; set; }
         public PermissionEntity Permission { get; set; }
         
         //public string BaseUrl { get; set; }

@@ -28,7 +28,7 @@ namespace DAL.Repository.Company
 
             company?.Projects.Add(project);
 
-            return _context.Save();
+            return _context.SaveChanges() > 0;
         }
 
         public bool Detach(int companyId, int projectId)
@@ -38,7 +38,7 @@ namespace DAL.Repository.Company
 
             company?.Projects.Remove(project);
 
-            return _context.Save();
+            return _context.SaveChanges() > 0;
         }
 
         public ProjectEntity GetById(int companyId, int projectId)

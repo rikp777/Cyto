@@ -27,7 +27,7 @@ namespace DAL.Repository.User
 
             user?.Companies.Add(company);
 
-            return _context.Save();
+            return _context.SaveChanges() > 0;
         }
 
         public bool Detach(int userId, int companyId)
@@ -37,7 +37,7 @@ namespace DAL.Repository.User
 
             user?.Companies.Remove(company);
 
-            return _context.Save();
+            return _context.SaveChanges() > 0;
         }
 
         public CompanyEntity GetById(int userId, int companyId)

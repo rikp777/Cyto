@@ -1,3 +1,4 @@
+using System;
 using Domain.Contracts;
 
 namespace Domain.Entities

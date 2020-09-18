@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Core.Objects.DataClasses;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Globalization;
@@ -17,9 +19,11 @@ namespace DAL.Context
     {
         public DatabaseContext() : base("DefaultConnection")
         {
+            //Bug fix 
             var ensureDLLIsCopied = System.Data.Entity.SqlServer.SqlProviderServices.Instance;
         }
 
+        // DB Sets 
         public DbSet<RoleEntity> Roles { get; set; }
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<PermissionEntity> Permissions { get; set; }
@@ -28,35 +32,6 @@ namespace DAL.Context
         public DbSet<ProjectEntity> Projects { get; set; }
         public DbSet<AuditTrailEntity> AuditTrails { get; set; }
         public DbSet<AuditTrailChangeLogEntity> AuditTrailChangeLogs { get; set; }
-        
-        //AuditTrail Data
-        private bool _audit = false;        
-        private UserEntity _user = null;
-        private CompanyEntity _company = null;
-        private string _serviceName = null;
-        private string _methodName = null;
-
-        // Save Audit Trail disabled 
-        public bool Save()
-        {
-            _audit = false;
-            var saved = SaveChanges();
-            return saved > 0;
-        }
-        
-        // Save Audit Trail enabled
-        public bool Save(UserEntity user, CompanyEntity company, string serviceName = null, string methodName = null)
-        {
-            _audit = true;
-            _company = company;
-            _user = user;
-
-            _serviceName = serviceName;
-            _methodName = methodName;
-            
-            var saved = SaveChanges();
-            return saved > 0;
-        }
         
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -73,74 +48,141 @@ namespace DAL.Context
             var auditTrailChangeLogBuilder = new AuditTrailChangeLogBuilder(modelBuilder.Entity<AuditTrailChangeLogEntity>());
         }
 
-        object GetPrimaryKeyValue(DbEntityEntry entry)
+        public List<AuditTrailChangeLogEntity> getChanges()
         {
-            var objectStateEntry = ((IObjectContextAdapter)this).ObjectContext.ObjectStateManager.GetObjectStateEntry(entry.Entity);
-            return objectStateEntry.EntityKey.EntityKeyValues[0].Value;
-        }
-
-        private void AuditTrail()
-        {
-            var modifiedEntities = ChangeTracker.Entries()
-                .Where(p => p.State == EntityState.Modified).ToList();
-            var now = DateTime.UtcNow;
-
-            string primaryKey = null;
-            
             var changes = new List<AuditTrailChangeLogEntity>();
-            foreach (var change in modifiedEntities)
+            var modifiedEntities = ChangeTracker.Entries()
+                .Where(p => p.State == EntityState.Modified)
+                .ToList();
+
+            if (modifiedEntities.Count > 0)
             {
-                //var entityName = change.Entity.GetType().Name;
-                primaryKey = GetPrimaryKeyValue(change).ToString();
-                foreach(var columnName in change.OriginalValues.PropertyNames)
+                foreach (var change in modifiedEntities)
                 {
-                    var originalValue = change.OriginalValues[columnName].ToString();
-                    var currentValue = change.CurrentValues[columnName].ToString();
-                    if (originalValue != currentValue)
+                    foreach(var columnName in change.OriginalValues.PropertyNames)
                     {
-                        var auditChangeLog = new AuditTrailChangeLogEntity
+                        var originalValue = change.OriginalValues[columnName].ToString();
+                        var currentValue = change.CurrentValues[columnName].ToString();
+                        if (originalValue != currentValue)
                         {
-                            ColumnName = columnName,
-                            ValueBefore = originalValue, 
-                            ValueAfter = currentValue
-                        };
-                        changes.Add(auditChangeLog);
+                            var auditChangeLog = new AuditTrailChangeLogEntity
+                            {
+                                ColumnName = columnName,
+                                ValueBefore = originalValue, 
+                                ValueAfter = currentValue
+                            };
+                            changes.Add(auditChangeLog);
                         
-                        Console.WriteLine(@"Audit Trail: 'Value Changed': [Original value: " + originalValue + @"] - [Current value: " + currentValue + @"] - [Column name: " + columnName + @"]");
+                            Console.WriteLine(@"Audit Trail: 'Value Changed': [Original value: " + originalValue + @"] - [Current value: " + currentValue + @"] - [Column name: " + columnName + @"]");
+                        }
                     }
                 }
             }
 
+            return changes;
+        }
 
+        public string getPrimarykey(ObjectStateEntry state)
+        {
+            SaveChanges();
+            var key =  state.EntityKey.EntityKeyValues[0].Value.ToString();
+            return key;
+        }
+        
+        public void AuditTrail(UserEntity user, CompanyEntity company, PermissionEntity permission = null, string serviceName = null, string methodName = null)
+        {
+            if(user == null) throw new Exception("AuditTrail Error: User is mandatory");
+            if(company == null) throw new Exception("AuditTrail Error: Company is mandatory");
+            
+            
+            var states = ((IObjectContextAdapter)this).ObjectContext.ObjectStateManager.GetObjectStateEntries(EntityState.Added | EntityState.Modified | EntityState.Deleted);
+            var now = DateTime.UtcNow;
 
-            var auditTrail = new AuditTrailEntity
+            foreach (var state in states)
             {
-                User = _user,
-                Company = _company,
-                Permission = null,
-                
-                ServiceName = _serviceName,
-                MethodName = _methodName,
-                MethodColor = "Red",
-                ActionType = AuditActionType.Index,
-                
-                IpAddress = null,
-                Reason = null,
+                var tableName = state.Entity.GetType().Name;
 
-                TableName = null,
-                PrimaryKey = primaryKey,
+                if (state.State == EntityState.Added)
+                {
+                    var auditTrailEntity = new AuditTrailEntity()
+                    {
+                        User = user,
+                        Company = company,
+                        Permission = permission,
                 
-                CreatedAt = now.ToString(CultureInfo.InvariantCulture),
-                AuditTrailChangeLog = changes,
-            };
-            this.Set<AuditTrailEntity>().Add(auditTrail);
+                        ServiceName = serviceName,
+                        MethodName = methodName,
+                        MethodColor = "Green",
+                        ActionType = AuditActionType.Create,
+
+                        TableName = tableName,
+                        PrimaryKey = getPrimarykey(state),
+                
+                        CreatedAt = now.ToString(CultureInfo.InvariantCulture),
+                    };
+                    Set<AuditTrailEntity>().Add(auditTrailEntity);
+                }
+                if (state.State == EntityState.Deleted)
+                {
+                    var auditTrailDelete = new AuditTrailEntity()
+                    {
+                        User = user,
+                        Company = company,
+                        Permission = permission,
+                
+                        ServiceName = serviceName,
+                        MethodName = methodName,
+                        MethodColor = "Red",
+                        ActionType = AuditActionType.Delete,
+
+                        TableName = tableName,
+                        PrimaryKey = getPrimarykey(state),
+                
+                        CreatedAt = now.ToString(CultureInfo.InvariantCulture),
+                    };
+                    Set<AuditTrailEntity>().Add(auditTrailDelete);
+                }
+                
+                if (state.State == EntityState.Modified)
+                {
+                    var auditTrailUpdate = new AuditTrailEntity()
+                    {
+                        User = user,
+                        Company = company,
+                        Permission = permission,
+                
+                        ServiceName = serviceName,
+                        MethodName = methodName,
+                        MethodColor = "Yellow",
+                        ActionType = AuditActionType.Update,
+                        
+                        TableName = tableName,
+                        AuditTrailChangeLog = getChanges(),
+                        PrimaryKey = getPrimarykey(state),
+
+                        CreatedAt = now.ToString(CultureInfo.InvariantCulture),
+                    };
+                    Set<AuditTrailEntity>().Add(auditTrailUpdate);
+                }
+            }
+            
+        }
+        
+        
+        //TODO add permission
+        public int SaveChanges(UserEntity user, CompanyEntity company, PermissionEntity permission = null, string serviceName = null, string methodName = null)
+        {
+            AuditTrail(user, company, permission, serviceName, methodName);
+            return SaveChanges();
+        }
+        public int SaveChanges(UserEntity user, CompanyEntity company)
+        {
+            AuditTrail(user, company);
+            return SaveChanges();
         }
 
         public override int SaveChanges()
         {
-            //Audit trailing automation
-            if (_audit) this.AuditTrail();
-
             return base.SaveChanges();
         }
     }

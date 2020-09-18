@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using DAL.Context;
 using DAL.Repository.Company;
 using DAL.Repository.Experiment;
 using DAL.Repository.User;
-using Domain.Audit;
 using Domain.Entities;
 using Domain.Requests;
 using Domain.Resources;
@@ -16,17 +14,18 @@ namespace LOGIC.Services.Experiment
 {
     public class ExperimentService : IGenericCrudService<ExperimentResource, ExperimentRequest>
     {
+
         private readonly ExperimentRepository _experimentRepository;
         private readonly CompanyRepository _companyRepository;
-        //private readonly AuditTrailService _auditTrailService;
+        private readonly AuditTrailService _auditTrailService;
         private readonly UserRepository _userRepository;
         
         public ExperimentService()
         {
             DatabaseContext context = new DatabaseContext();
-            _companyRepository = new CompanyRepository(context);
-            //_auditTrailService = new AuditTrailService(context);
             _userRepository = new UserRepository(context);
+            _companyRepository = new CompanyRepository(context);
+            _auditTrailService = new AuditTrailService(context);
             
             _experimentRepository = new ExperimentRepository(context);
         }
@@ -37,27 +36,29 @@ namespace LOGIC.Services.Experiment
             .Select(ExperimentResource.FromEntity)
             .ToList();
 
-        public bool Create(ExperimentRequest entity) => _experimentRepository.Create(ExperimentRequest.ToEntity(entity));
+        public bool Create(ExperimentRequest entity)
+        {
+            var user = _userRepository.GetById(2);
+            var company = _companyRepository.GetById(1);
+            
+            _experimentRepository.Create(ExperimentRequest.ToEntity(entity));
+            _experimentRepository.Save(user, company);
+            
+            return true;
+        } 
         public bool Update(int id, ExperimentRequest entity)
         {
-            //var authUser = _userRepository.GetById(2);
-            //var entityOld = _experimentRepository.GetById(id, new List<string>(){"Project.Company"});
-            //var entityNew = ExperimentRequest.ToEntity(entity);
+            var user = _userRepository.GetById(2);
+            var entityOld = _experimentRepository.GetById(id, new List<string>(){"Project.Company"});
+            var company = entityOld.Project.Company;
 
-            // var changes = new List<AuditTrailChangeLogEntity>();
-            // var one = new AuditTrailChangeLogEntity("Name", entityOld.Name, entityNew.Name);
-            // if (one.Changed) changes.Add(one);
-            //
-            // var two = new AuditTrailChangeLogEntity("Description", entityOld.Description, entityNew.Description);
-            // if (two.Changed) changes.Add(two);
             
             var update = ExperimentRequest.ToEntity(entity);
             update.Id = id;
-            var success = _experimentRepository.Update(id, update);
-            //if (success) _auditTrailService.Capture(authUser, entityOld.Project.Company, null, (AuditActionType) 2, "ExperimentService", "Update", entityOld.Id.ToString(), entityOld, changes);
-
-            //primary key
-            //base url of request 
+            
+            _experimentRepository.Update(id, update);
+            _experimentRepository.Save(user, company);
+            
             return true;
         } 
         

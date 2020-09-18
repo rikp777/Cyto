@@ -5,6 +5,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using DAL.Context;
 using DAL.Repository.Interfaces;
+using Domain.Entities;
+using TrackerEnabledDbContext.Common.Interfaces;
 
 namespace DAL.Repository
 {
@@ -15,12 +17,10 @@ namespace DAL.Repository
 
         protected GenericCrudRepository(DatabaseContext context)
         {
-            this._context = context;
-            this._dbSet = context.Set<TEntity>();
+            _context = context;
+            _dbSet = context.Set<TEntity>();
         }
 
-        
-        
         public List<TEntity> GetAll(
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, 
@@ -68,7 +68,7 @@ namespace DAL.Repository
         {
             _dbSet.Add(entity);
 
-            return Save();
+            return true;
         }
 
         
@@ -77,7 +77,7 @@ namespace DAL.Repository
         {
             var entityToDelete = _dbSet.Find(id);
             Delete(entityToDelete);
-            return Save();
+            return true;
         }
 
         
@@ -90,7 +90,7 @@ namespace DAL.Repository
             }
 
             _dbSet.Remove(entityToDelete);
-            return Save();
+            return true;
         }
 
         
@@ -102,18 +102,17 @@ namespace DAL.Repository
             
             _context.Entry(entity).CurrentValues.SetValues(entityToUpdate);
 
-            return Save();
-            // _dbSet.Attach(entityToUpdate);
-            // _context.Entry(entityToUpdate).State = EntityState.Modified;
-            //
-            // return Save();
+            return true;
         }
 
-        private bool Save()
+        public bool Save()
         {
-            
-            var saved = _context.SaveChanges();
-            return saved > 0;
+            return _context.SaveChanges() > 0;
+        }
+
+        public bool Save(UserEntity user, CompanyEntity company)
+        {
+            return _context.SaveChanges(user, company) > 0;
         }
     }
 }
