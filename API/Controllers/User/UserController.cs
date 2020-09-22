@@ -21,7 +21,7 @@ namespace API.Controllers.User
         [Route("users")]
         public IHttpActionResult GetAll()
         {
-            var results = _userService.GetAll();
+            var results = _userService.GetAll(1,1);
             if (results.ToArray().Length == 0) return Ok("There are no users found");
 
             return Ok(results);

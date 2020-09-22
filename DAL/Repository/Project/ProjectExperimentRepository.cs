@@ -28,7 +28,7 @@ namespace DAL.Repository.Project
 
             project?.Experiments.Add(experiment);
             
-            _context.Save();
+            _context.SaveChanges();
             return experiment;
         }
 
@@ -39,7 +39,7 @@ namespace DAL.Repository.Project
 
             project?.Experiments.Remove(experiment);
             
-            _context.Save();
+            _context.SaveChanges();
             return experiment;
         }
 

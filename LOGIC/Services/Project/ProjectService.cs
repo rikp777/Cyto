@@ -20,7 +20,7 @@ namespace LOGIC.Services.Project
 
         public ProjectResource GetById(int id) => ProjectResource.FromEntity(_projectRepository.GetById(id));
 
-        public List<ProjectResource> GetAll() => _projectRepository
+        public List<ProjectResource> GetAll(int size, int page) => _projectRepository
             .GetAll()
             .Select(ProjectResource.FromEntity)
             .ToList();

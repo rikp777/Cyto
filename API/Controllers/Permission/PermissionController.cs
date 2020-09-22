@@ -1,4 +1,5 @@
 using System.Web.Http;
+using DAL.Context;
 using Domain.Requests;
 using LOGIC.Services.Experiment;
 using LOGIC.Services.Permission;
@@ -19,7 +20,7 @@ namespace API.Controllers.Permission
         [Route("permissions")]
         public IHttpActionResult GetAll()
         {
-            var results = _permissionService.GetAll();
+            var results = _permissionService.GetAll(1,1);
             return Ok(results);
         }
 

@@ -1,4 +1,5 @@
 using System.Data.Entity;
+using Domain.Contracts;
 using Domain.Entities;
 using TrackerEnabledDbContext.Common.Interfaces;
 

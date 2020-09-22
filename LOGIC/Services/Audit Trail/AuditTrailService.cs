@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using DAL.Context;
+using DAL.Interfaces;
 using DAL.Repository.AuditTrail;
 using Domain.Audit;
 using Domain.Entities;
@@ -15,8 +16,8 @@ namespace LOGIC.Services.Audit_Trail
     public class AuditTrailService
     {
         private readonly AuditTrailRepository _auditTrailRepository;
-        private readonly DatabaseContext _context;
-        public AuditTrailService(DatabaseContext context)
+        private readonly IDatabaseContext _context;
+        public AuditTrailService(IDatabaseContext context)
         {
             _auditTrailRepository = new AuditTrailRepository(context);
             _context = context;

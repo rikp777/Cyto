@@ -37,8 +37,8 @@ namespace LOGIC.Services.Company
             return companyEntity == null ? null : CompanyResource.FromEntity(companyEntity);
         }
         
-        public List<CompanyResource> GetAll() => _companyRepository
-            .GetAll()
+        public List<CompanyResource> GetAll(int size, int page) => _companyRepository
+            .GetAll(size, page)
             .Select(CompanyResource.FromEntity)
             .ToList();
 

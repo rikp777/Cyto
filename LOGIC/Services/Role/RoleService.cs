@@ -20,7 +20,7 @@ namespace LOGIC.Services.Role
 
         public RoleResource GetById(int id) => RoleResource.FromEntity(_roleRepository.GetById(id));
 
-        public List<RoleResource> GetAll() => _roleRepository
+        public List<RoleResource> GetAll(int size, int page) => _roleRepository
             .GetAll()
             .Select(RoleResource.FromEntity)
             .ToList();

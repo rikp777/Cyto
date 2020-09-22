@@ -45,7 +45,7 @@ namespace LOGIC.Services.Experiment
         }
 
         public List<ExperimentResource> GetAll(int size, int page) => _experimentRepository
-            .GetAll().Skip(size * (page -1)).Take(size)
+            .GetAll()
             .Select(ExperimentResource.FromEntity)
             .ToList();
 
@@ -61,7 +61,7 @@ namespace LOGIC.Services.Experiment
             update.Id = id;
             
             _experimentRepository.Update(id, update);
-            _experimentRepository.Save(user, company);
+            _experimentRepository.SaveChanges(user, company);
             
             return true;
         } 

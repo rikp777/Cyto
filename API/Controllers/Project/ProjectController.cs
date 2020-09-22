@@ -19,7 +19,7 @@ namespace API.Controllers.Project
         [Route("projects")]
         public IHttpActionResult GetAll()
         {
-            var results = _projectService.GetAll();
+            var results = _projectService.GetAll(1,1);
             return Ok(results);
         }
 

@@ -26,7 +26,7 @@ namespace API.Controllers.Company
         [Route("companies")]
         public IHttpActionResult GetAll()
         {
-            var results = _companyService.GetAll();
+            var results = _companyService.GetAll(1,1);
             if (results.Count == 0) return Ok("There are no companies found");
 
             return Ok(results);

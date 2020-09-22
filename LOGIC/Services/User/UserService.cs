@@ -24,8 +24,9 @@ namespace LOGIC.Services.User
             var userEntity = _userRepository.GetById(id);
             return userEntity == null ? null : UserResource.FromEntity(_userRepository.GetById(id));
         }
+        
 
-        public List<UserResource> GetAll() => _userRepository.GetAll()
+        public List<UserResource> GetAll(int size, int page) => _userRepository.GetAll()
             .Select(UserResource.FromEntity)
             .ToList();
 

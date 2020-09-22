@@ -27,7 +27,7 @@ namespace DAL.Repository
 
             role?.Permissions.Add(permission);
 
-            _context.Save();
+            _context.SaveChanges();
             return permission;
         }
 
@@ -38,7 +38,7 @@ namespace DAL.Repository
 
             role?.Permissions.Remove(permission);
 
-            _context.Save();
+            _context.SaveChanges();
             return permission;
         }
 

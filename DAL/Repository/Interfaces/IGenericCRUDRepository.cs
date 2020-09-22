@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Domain.Entities;
 
 namespace DAL.Repository.Interfaces
 {
@@ -15,5 +16,8 @@ namespace DAL.Repository.Interfaces
         bool Create(TEntity entity);
         bool Update(int id, TEntity entity);
         bool Delete(int id);
+
+        bool SaveChanges();
+        bool SaveChanges(UserEntity user, CompanyEntity company);
     }
 }

@@ -107,14 +107,19 @@ namespace DAL.Repository
             
             _context.Entry(entity).CurrentValues.SetValues(entityToUpdate);
 
-            return Save();
+            return SaveChanges();
             // _dbSet.Attach(entityToUpdate);
             // _context.Entry(entityToUpdate).State = EntityState.Modified;
             //
             // return Save();
         }
 
-        private bool Save()
+        public bool SaveChanges()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0;
+        }
+        public bool SaveChanges(UserEntity user, CompanyEntity company)
         {
             var saved = _context.SaveChanges();
             return saved > 0;
