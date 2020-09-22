@@ -27,14 +27,14 @@ namespace LOGIC.Services.Permission
             .ToList();
 
 
-        public bool Create(PermissionRequest entity, HttpContext current) => _permissionRepository
+        public bool Create(PermissionRequest entity, HttpContext current = null) => _permissionRepository
             .Create(PermissionRequest.ToEntity(entity));
 
 
-        public bool Update(int id, PermissionRequest entity, HttpContext current) => _permissionRepository
+        public bool Update(int id, PermissionRequest entity, HttpContext current = null) => _permissionRepository
             .Update(id, PermissionRequest.ToEntity(entity));
 
 
-        public bool Delete(int id, HttpContext current) => _permissionRepository.Delete(id);
+        public bool Delete(int id, HttpContext current = null) => _permissionRepository.Delete(id);
     }
 }

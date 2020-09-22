@@ -26,15 +26,15 @@ namespace LOGIC.Services.Project
             .Select(ProjectResource.FromEntity)
             .ToList();
 
-        public bool Create(ProjectRequest entity, HttpContext current) => _projectRepository
+        public bool Create(ProjectRequest entity, HttpContext current = null) => _projectRepository
             .Create(ProjectRequest.ToEntity(entity));
 
 
-        public bool Update(int id, ProjectRequest entity, HttpContext current) => _projectRepository
+        public bool Update(int id, ProjectRequest entity, HttpContext current = null) => _projectRepository
             .Update(id, ProjectRequest.ToEntity(entity));
 
 
-        public bool Delete(int id, HttpContext current) => _projectRepository
+        public bool Delete(int id, HttpContext current = null) => _projectRepository
             .Delete(id);
     }
 }

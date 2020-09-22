@@ -32,15 +32,15 @@ namespace LOGIC.Services.User
             .ToList();
 
 
-        public bool Create(UserRequest user, HttpContext current) => _userRepository
+        public bool Create(UserRequest user, HttpContext current = null) => _userRepository
             .Create(UserRequest.ToEntity(user));
 
 
-        public bool Update(int id, UserRequest user, HttpContext current) => _userRepository
+        public bool Update(int id, UserRequest user, HttpContext current = null) => _userRepository
             .Update(id, UserRequest.ToEntity(user));
 
 
-        public bool Delete(int id, HttpContext current) => _userRepository
+        public bool Delete(int id, HttpContext current = null) => _userRepository
             .Delete(id);
 
         public UserResource GetByName(string name)

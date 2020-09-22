@@ -43,9 +43,9 @@ namespace LOGIC.Services.Company
             .Select(CompanyResource.FromEntity)
             .ToList();
 
-        public bool Create(CompanyRequest entity, HttpContext current) => _companyRepository.Create(CompanyRequest.ToEntity(entity));
+        public bool Create(CompanyRequest entity, HttpContext current = null) => _companyRepository.Create(CompanyRequest.ToEntity(entity));
 
-        public bool Update(int id, CompanyRequest entity, HttpContext current)
+        public bool Update(int id, CompanyRequest entity, HttpContext current = null)
         {
             
             //var entityOld = _companyRepository.GetById(id);
@@ -68,7 +68,7 @@ namespace LOGIC.Services.Company
 
             return true;
         } 
-        public bool Delete(int id, HttpContext current) => _companyRepository.Delete(id);
+        public bool Delete(int id, HttpContext current = null) => _companyRepository.Delete(id);
 
         public CompanyResource GetByName(string name)
         {

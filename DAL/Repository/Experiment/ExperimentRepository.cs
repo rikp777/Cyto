@@ -17,8 +17,8 @@ namespace DAL.Repository.Experiment
 {
     public class ExperimentRepository : GenericCrudRepository<ExperimentEntity>, IGenericCrudRepository<ExperimentEntity>
     {
-        private IAuditTrailRepository _auditTrailRepository;
-        private IDatabaseContext _context;
+        private readonly IAuditTrailRepository _auditTrailRepository;
+        private readonly IDatabaseContext _context;
         public ExperimentRepository(IDatabaseContext context) : base(context, context.Experiments)
         {
             _context = context;

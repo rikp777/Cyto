@@ -9,7 +9,7 @@ namespace DAL.Repository.User
 {
     public class UserRepository : GenericCrudRepository<UserEntity>, IGenericCrudRepository<UserEntity>
     {
-        protected readonly DbSet<UserEntity> _dbSet;
+        private readonly DbSet<UserEntity> _dbSet;
         public UserRepository(IDatabaseContext context) : base(context, context.Users)
         {
             _dbSet = context.Users;

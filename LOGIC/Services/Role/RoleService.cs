@@ -27,15 +27,15 @@ namespace LOGIC.Services.Role
             .ToList();
 
 
-        public bool Create(RoleRequest entity, HttpContext current) => _roleRepository
+        public bool Create(RoleRequest entity, HttpContext current = null) => _roleRepository
             .Create(RoleRequest.ToEntity(entity));
 
 
-        public bool Update(int id, RoleRequest entity, HttpContext current) => _roleRepository
+        public bool Update(int id, RoleRequest entity, HttpContext current = null) => _roleRepository
             .Update(id, RoleRequest.ToEntity(entity));
 
 
-        public bool Delete(int id, HttpContext current) => _roleRepository
+        public bool Delete(int id, HttpContext current = null) => _roleRepository
             .Delete(id);
     }
 }
