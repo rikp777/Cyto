@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class add : DbMigration
+    public partial class changes : DbMigration
     {
         public override void Up()
         {
@@ -29,12 +29,10 @@
                         TableName = c.String(),
                         PrimaryKey = c.String(),
                         CreatedAt = c.String(),
-                        ActionType = c.Int(nullable: false),
-                        ServiceName = c.String(),
-                        MethodName = c.String(),
-                        MethodColor = c.String(),
+                        RequestBaseUrl = c.String(),
+                        RequestMethod = c.String(),
+                        RequestMethodColor = c.String(),
                         IpAddress = c.String(),
-                        Reason = c.String(),
                         User_Id = c.Int(),
                         Company_Id = c.Int(),
                         Permission_Id = c.Int(),

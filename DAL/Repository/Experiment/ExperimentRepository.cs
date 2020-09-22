@@ -25,10 +25,10 @@ namespace DAL.Repository.Experiment
             _auditTrailRepository = new AuditTrailRepository(context);
         }
 
-        public int SaveChanges(AuditTrailMetaData auditTrailMetaData)
+        public bool SaveChanges(AuditTrailMetaData auditTrailMetaData)
         {
             _auditTrailRepository.Capture(auditTrailMetaData);
-            return _context.SaveChanges();
+            return _context.SaveChanges() > 0;
         }
     }
 }

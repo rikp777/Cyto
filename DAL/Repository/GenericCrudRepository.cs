@@ -73,7 +73,7 @@ namespace DAL.Repository
             _dbSet.Add(entity);
 
             // return Save();
-            return _context.SaveChanges() > 1;
+            return true;
         }
 
 
@@ -86,7 +86,7 @@ namespace DAL.Repository
         }
 
 
-        private void Delete(TEntity entityToDelete)
+        private bool Delete(TEntity entityToDelete)
         {
             if (_context.GetState(entityToDelete) == EntityState.Detached)
             {
@@ -94,19 +94,19 @@ namespace DAL.Repository
             }
 
             _dbSet.Remove(entityToDelete);
-            // return Save();
+            return true;
         }
 
         
         
         public bool Update(int id, TEntity entityToUpdate)
         {
-            var entity = _dbSet.Find(id);
-            if (entity == null) return false;
+            _dbSet.Attach(entityToUpdate);
+            _context.Entry(entityToUpdate).State = EntityState.Modified;
             
-            _context.Entry(entity).CurrentValues.SetValues(entityToUpdate);
-
-            return SaveChanges();
+            //_context.Entry(entityToUpdate).Reload();
+            //var after = _context.Experiments;
+            return true;
         }
 
         public bool SaveChanges()

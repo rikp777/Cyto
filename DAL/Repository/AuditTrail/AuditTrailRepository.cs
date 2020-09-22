@@ -87,7 +87,7 @@ namespace DAL.Repository.AuditTrail
             
             
             var states =
-                ((IObjectContextAdapter) this).ObjectContext.ObjectStateManager.GetObjectStateEntries(
+                ((IObjectContextAdapter) _context).ObjectContext.ObjectStateManager.GetObjectStateEntries(
                     EntityState.Added | EntityState.Modified | EntityState.Deleted);
 
             foreach (var state in states)
@@ -116,6 +116,8 @@ namespace DAL.Repository.AuditTrail
                     }
                     case EntityState.Modified:
                     {
+                        var logs = GetChanges();
+                        
                         var auditTrailUpdate = new AuditTrailEntity()
                         {
                             User = user,
@@ -125,16 +127,16 @@ namespace DAL.Repository.AuditTrail
                             RequestBaseUrl = requestBaseUrl,
                             RequestMethod = requestMethod,
                             RequestMethodColor = "Green",
+                            
+                            AuditTrailChangeLog = logs,
 
                             TableName = GetTableName(state),
                             PrimaryKey = GetPrimaryKey(state),
-
-                            AuditTrailChangeLog = GetChanges(),
                             
                             CreatedAt = now.ToString(CultureInfo.InvariantCulture),
                         };
                         _context.Set<AuditTrailEntity>().Add(auditTrailUpdate);
-                        break;
+                        return true;
                     }
                     case EntityState.Deleted:
                     {

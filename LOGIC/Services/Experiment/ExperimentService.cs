@@ -35,6 +35,9 @@ namespace LOGIC.Services.Experiment
         public ExperimentService(IDatabaseContext context)
         {
             _experimentRepository = new ExperimentRepository(context);
+            _userRepository = new UserRepository(context);
+            _companyRepository = new CompanyRepository(context);
+            _experimentRepository = new ExperimentRepository(context);
         }
         
 
@@ -63,7 +66,7 @@ namespace LOGIC.Services.Experiment
             
             var success = false;
             success = _experimentRepository.Create(ExperimentRequest.ToEntity(entity));
-            success = _experimentRepository.SaveChanges(auditMetaData) > 0;
+            success = _experimentRepository.SaveChanges(auditMetaData);
             return success;
         } 
         public bool Update(int id, ExperimentRequest entity, HttpContext current)
@@ -74,18 +77,19 @@ namespace LOGIC.Services.Experiment
             {
                 User = _userRepository.GetById(1),
                 Company = _companyRepository.GetById(1),
+                Permission = new PermissionEntity(),
                 RequestMethod = current.Request.HttpMethod,
-                RequestBaseUrl = current.Request.ToString()
+                RequestBaseUrl = current.Request.Path
             };
             
 
             var update = ExperimentRequest.ToEntity(entity);
-            update.Id = id;
+           update.Id = id;
 
             
             var success = false;
             success = _experimentRepository.Update(id, update);
-            success = _experimentRepository.SaveChanges(auditMetaData) > 0;
+            success = _experimentRepository.SaveChanges(auditMetaData);
             return success;
         }
         public bool Delete(int id, HttpContext current)
@@ -99,7 +103,7 @@ namespace LOGIC.Services.Experiment
             };
 
             _experimentRepository.Delete(id);
-            return _experimentRepository.SaveChanges(auditMetaData) > 0;
+            return _experimentRepository.SaveChanges(auditMetaData);
         } 
     }
 }
