@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using DAL.Context;
 using DAL.Interfaces;
 using DAL.Repository.Company;
@@ -38,13 +39,13 @@ namespace LOGIC.Services.Company
         }
         
         public List<CompanyResource> GetAll(int size, int page) => _companyRepository
-            .GetAll(size, page)
+            .GetAll()
             .Select(CompanyResource.FromEntity)
             .ToList();
 
-        public bool Create(CompanyRequest entity) => _companyRepository.Create(CompanyRequest.ToEntity(entity));
+        public bool Create(CompanyRequest entity, HttpContext current) => _companyRepository.Create(CompanyRequest.ToEntity(entity));
 
-        public bool Update(int id, CompanyRequest entity)
+        public bool Update(int id, CompanyRequest entity, HttpContext current)
         {
             
             //var entityOld = _companyRepository.GetById(id);
@@ -67,7 +68,7 @@ namespace LOGIC.Services.Company
 
             return true;
         } 
-        public bool Delete(int id) => _companyRepository.Delete(id);
+        public bool Delete(int id, HttpContext current) => _companyRepository.Delete(id);
 
         public CompanyResource GetByName(string name)
         {

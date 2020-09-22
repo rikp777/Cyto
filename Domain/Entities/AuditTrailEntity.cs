@@ -8,13 +8,10 @@ namespace Domain.Entities
 {
     public class AuditTrailEntity : BaseEntity
     {
-        public CompanyEntity Company { get; set; }
-        // [ForeignKey("asd")]
-        // public string UserId { get; set; }    
         public virtual UserEntity User { get; set; }
-        public PermissionEntity Permission { get; set; }
-        
-        //public string BaseUrl { get; set; }
+        public virtual CompanyEntity Company { get; set; }
+        public virtual PermissionEntity Permission { get; set; }
+
 
         public string TableName { get; set; }
         public string PrimaryKey { get; set; }
@@ -22,17 +19,15 @@ namespace Domain.Entities
 
         public string CreatedAt { get; set; }
         
-        public AuditActionType ActionType { get; set; } // Action Type description (CRUD)
-        public string ServiceName { get; set; } //Controller name or service class name
-        public string MethodName { get; set; } // function name 
-        public string MethodColor { get; set; } // Indication color 
+        public string RequestBaseUrl { get; set; }
+        public string RequestMethod { get; set; }
+        public string RequestMethodColor { get; set; } // Indication color 
         
         public string IpAddress { get; set; } // Ip address of user 
-        public string Reason { get; set; } // Why did the user wanted to do the change
 
         public override string ToString()
         {
-            return ServiceName + " " + MethodName;
+            return RequestBaseUrl + " " + RequestMethod;
         }
     }
 }

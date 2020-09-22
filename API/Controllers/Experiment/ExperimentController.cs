@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Web;
 using System.Web.Http;
 using DAL.Context;
 using DAL.Interfaces;
@@ -45,7 +46,7 @@ namespace API.Controllers.Experiment
         [Route("experiments")]
         public IHttpActionResult Create(ExperimentRequest entity)
         {
-            var result = _experimentService.Create(entity);
+            var result = _experimentService.Create(entity, HttpContext.Current);
             return Ok(result);
         }
 
@@ -53,7 +54,7 @@ namespace API.Controllers.Experiment
         [Route("experiments/{id}")]
         public IHttpActionResult Update(int id, ExperimentRequest entity)
         {
-            var result = _experimentService.Update(id, entity);
+            var result = _experimentService.Update(id, entity, HttpContext.Current);
             return Ok(result);
         }
 
@@ -61,7 +62,7 @@ namespace API.Controllers.Experiment
         [Route("experiments/{id}")]
         public IHttpActionResult Delete(int id)
         {
-            var result = _experimentService.Delete(id);
+            var result = _experimentService.Delete(id, HttpContext.Current);
             return Ok(result);
         }
     }

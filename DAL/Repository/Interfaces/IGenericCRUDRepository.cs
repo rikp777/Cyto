@@ -18,6 +18,5 @@ namespace DAL.Repository.Interfaces
         bool Delete(int id);
 
         bool SaveChanges();
-        bool SaveChanges(UserEntity user, CompanyEntity company);
     }
 }

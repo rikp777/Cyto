@@ -61,137 +61,142 @@ namespace DAL.Context
             var auditTrailChangeLogBuilder = new AuditTrailChangeLogBuilder(modelBuilder.Entity<AuditTrailChangeLogEntity>());
         }
 
-        public List<AuditTrailChangeLogEntity> getChanges()
-        {
-            var changes = new List<AuditTrailChangeLogEntity>();
-            var modifiedEntities = ChangeTracker.Entries()
-                .Where(p => p.State == EntityState.Modified)
-                .ToList();
-
-            if (modifiedEntities.Count > 0)
-            {
-                foreach (var change in modifiedEntities)
-                {
-                    foreach(var columnName in change.OriginalValues.PropertyNames)
-                    {
-                        var originalValue = change.OriginalValues[columnName].ToString();
-                        var currentValue = change.CurrentValues[columnName].ToString();
-                        if (originalValue != currentValue)
-                        {
-                            var auditChangeLog = new AuditTrailChangeLogEntity
-                            {
-                                ColumnName = columnName,
-                                ValueBefore = originalValue, 
-                                ValueAfter = currentValue
-                            };
-                            changes.Add(auditChangeLog);
-                        
-                            Console.WriteLine(@"Audit Trail: 'Value Changed': [Original value: " + originalValue + @"] - [Current value: " + currentValue + @"] - [Column name: " + columnName + @"]");
-                        }
-                    }
-                }
-            }
-
-            return changes;
-        }
-
-        public string getPrimarykey(ObjectStateEntry state)
-        {
-            SaveChanges();
-            var key =  state.EntityKey.EntityKeyValues[0].Value.ToString();
-            return key;
-        }
-        
-        public void AuditTrail(UserEntity user, CompanyEntity company, PermissionEntity permission = null, string serviceName = null, string methodName = null)
-        {
-            if(user == null) throw new Exception("AuditTrail Error: User is mandatory");
-            if(company == null) throw new Exception("AuditTrail Error: Company is mandatory");
-            
-            
-            var states = ((IObjectContextAdapter)this).ObjectContext.ObjectStateManager.GetObjectStateEntries(EntityState.Added | EntityState.Modified | EntityState.Deleted);
-            var now = DateTime.UtcNow;
-
-            foreach (var state in states)
-            {
-                var tableName = state.Entity.GetType().Name;
-
-                if (state.State == EntityState.Added)
-                {
-                    var auditTrailEntity = new AuditTrailEntity()
-                    {
-                        User = user,
-                        Company = company,
-                        Permission = permission,
-                
-                        ServiceName = serviceName,
-                        MethodName = methodName,
-                        MethodColor = "Green",
-                        ActionType = AuditActionType.Create,
-
-                        TableName = tableName,
-                        PrimaryKey = getPrimarykey(state),
-                
-                        CreatedAt = now.ToString(CultureInfo.InvariantCulture),
-                    };
-                    Set<AuditTrailEntity>().Add(auditTrailEntity);
-                }
-                if (state.State == EntityState.Deleted)
-                {
-                    var auditTrailDelete = new AuditTrailEntity()
-                    {
-                        User = user,
-                        Company = company,
-                        Permission = permission,
-                
-                        ServiceName = serviceName,
-                        MethodName = methodName,
-                        MethodColor = "Red",
-                        ActionType = AuditActionType.Delete,
-
-                        TableName = tableName,
-                        PrimaryKey = getPrimarykey(state),
-                
-                        CreatedAt = now.ToString(CultureInfo.InvariantCulture),
-                    };
-                    Set<AuditTrailEntity>().Add(auditTrailDelete);
-                }
-                
-                if (state.State == EntityState.Modified)
-                {
-                    var auditTrailUpdate = new AuditTrailEntity()
-                    {
-                        User = user,
-                        Company = company,
-                        Permission = permission,
-                
-                        ServiceName = serviceName,
-                        MethodName = methodName,
-                        MethodColor = "Yellow",
-                        ActionType = AuditActionType.Update,
-                        
-                        TableName = tableName,
-                        AuditTrailChangeLog = getChanges(),
-                        PrimaryKey = getPrimarykey(state),
-
-                        CreatedAt = now.ToString(CultureInfo.InvariantCulture),
-                    };
-                    Set<AuditTrailEntity>().Add(auditTrailUpdate);
-                }
-            }
-            
-        }
-        
-        
-        //TODO add permission
-        public int SaveChanges(UserEntity user, CompanyEntity company, PermissionEntity permission = null, string serviceName = null, string methodName = null)
-        {
-            AuditTrail(user, company, permission, serviceName, methodName);
-            return SaveChanges();
-        }
-        public int SaveChanges(UserEntity user, CompanyEntity company)
-        {
-            AuditTrail(user, company);
-            return SaveChanges();
-        }
+        // public List<AuditTrailChangeLogEntity> getChanges()
+        // {
+        //     var changes = new List<AuditTrailChangeLogEntity>();
+        //     var modifiedEntities = ChangeTracker.Entries()
+        //         .Where(p => p.State == EntityState.Modified)
+        //         .ToList();
+        //
+        //     if (modifiedEntities.Count > 0)
+        //     {
+        //         foreach (var change in modifiedEntities)
+        //         {
+        //             foreach(var columnName in change.OriginalValues.PropertyNames)
+        //             {
+        //                 var originalValue = change.OriginalValues[columnName].ToString();
+        //                 var currentValue = change.CurrentValues[columnName].ToString();
+        //                 if (originalValue != currentValue)
+        //                 {
+        //                     var auditChangeLog = new AuditTrailChangeLogEntity
+        //                     {
+        //                         ColumnName = columnName,
+        //                         ValueBefore = originalValue, 
+        //                         ValueAfter = currentValue
+        //                     };
+        //                     changes.Add(auditChangeLog);
+        //                 
+        //                     Console.WriteLine(@"Audit Trail: 'Value Changed': [Original value: " + originalValue + @"] - [Current value: " + currentValue + @"] - [Column name: " + columnName + @"]");
+        //                 }
+        //             }
+        //         }
+        //     }
+        //
+        //     return changes;
+        // }
+        //
+        // public string getPrimarykey(ObjectStateEntry state)
+        // {
+        //     SaveChanges();
+        //     var key =  state.EntityKey.EntityKeyValues[0].Value.ToString();
+        //     return key;
+        // }
+        //
+        // public void AuditTrail(UserEntity user, CompanyEntity company, PermissionEntity permission = null, string serviceName = null, string methodName = null)
+        // {
+        //     if(user == null) throw new Exception("AuditTrail Error: User is mandatory");
+        //     if(company == null) throw new Exception("AuditTrail Error: Company is mandatory");
+        //     
+        //     
+        //     var states = ((IObjectContextAdapter)this).ObjectContext.ObjectStateManager.GetObjectStateEntries(EntityState.Added | EntityState.Modified | EntityState.Deleted);
+        //     var now = DateTime.UtcNow;
+        //
+        //     foreach (var state in states)
+        //     {
+        //         var tableName = state.Entity.GetType().Name;
+        //
+        //         switch (state.State)
+        //         {
+        //             case EntityState.Added:
+        //             {
+        //                 var auditTrailEntity = new AuditTrailEntity()
+        //                 {
+        //                     User = user,
+        //                     Company = company,
+        //                     Permission = permission,
+        //         
+        //                     ServiceName = serviceName,
+        //                     MethodName = methodName,
+        //                     MethodColor = "Green",
+        //                     ActionType = AuditActionType.Create,
+        //
+        //                     TableName = tableName,
+        //                     PrimaryKey = getPrimarykey(state),
+        //         
+        //                     CreatedAt = now.ToString(CultureInfo.InvariantCulture),
+        //                 };
+        //                 Set<AuditTrailEntity>().Add(auditTrailEntity);
+        //                 break;
+        //             }
+        //             case EntityState.Deleted:
+        //             {
+        //                 var auditTrailDelete = new AuditTrailEntity()
+        //                 {
+        //                     User = user,
+        //                     Company = company,
+        //                     Permission = permission,
+        //         
+        //                     ServiceName = serviceName,
+        //                     MethodName = methodName,
+        //                     MethodColor = "Red",
+        //                     ActionType = AuditActionType.Delete,
+        //
+        //                     TableName = tableName,
+        //                     PrimaryKey = getPrimarykey(state),
+        //         
+        //                     CreatedAt = now.ToString(CultureInfo.InvariantCulture),
+        //                 };
+        //                 Set<AuditTrailEntity>().Add(auditTrailDelete);
+        //                 break;
+        //             }
+        //             case EntityState.Modified:
+        //             {
+        //                 var auditTrailUpdate = new AuditTrailEntity()
+        //                 {
+        //                     User = user,
+        //                     Company = company,
+        //                     Permission = permission,
+        //         
+        //                     ServiceName = serviceName,
+        //                     MethodName = methodName,
+        //                     MethodColor = "Yellow",
+        //                     ActionType = AuditActionType.Update,
+        //                 
+        //                     TableName = tableName,
+        //                     AuditTrailChangeLog = getChanges(),
+        //                     PrimaryKey = getPrimarykey(state),
+        //
+        //                     CreatedAt = now.ToString(CultureInfo.InvariantCulture),
+        //                 };
+        //                 Set<AuditTrailEntity>().Add(auditTrailUpdate);
+        //                 break;
+        //             }
+        //         }
+        //     }
+        //     
+        // }
+        //
+        //
+        // //TODO add permission
+        // public int SaveChanges(UserEntity user, CompanyEntity company, PermissionEntity permission = null, string serviceName = null, string methodName = null)
+        // {
+        //     AuditTrail(user, company, permission, serviceName, methodName);
+        //     return SaveChanges();
+        // }
+        // public int SaveChanges(UserEntity user, CompanyEntity company)
+        // {
+        //     AuditTrail(user, company);
+        //     return SaveChanges();
+        // }
     }
 }

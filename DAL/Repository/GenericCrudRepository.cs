@@ -101,25 +101,15 @@ namespace DAL.Repository
         
         public bool Update(int id, TEntity entityToUpdate)
         {
-
             var entity = _dbSet.Find(id);
             if (entity == null) return false;
             
             _context.Entry(entity).CurrentValues.SetValues(entityToUpdate);
 
             return SaveChanges();
-            // _dbSet.Attach(entityToUpdate);
-            // _context.Entry(entityToUpdate).State = EntityState.Modified;
-            //
-            // return Save();
         }
 
         public bool SaveChanges()
-        {
-            var saved = _context.SaveChanges();
-            return saved > 0;
-        }
-        public bool SaveChanges(UserEntity user, CompanyEntity company)
         {
             var saved = _context.SaveChanges();
             return saved > 0;

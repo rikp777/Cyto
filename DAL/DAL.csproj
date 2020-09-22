@@ -45,6 +45,7 @@
         <Reference Include="System.ComponentModel.DataAnnotations" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
+        <Reference Include="System.Web" />
         <Reference Include="System.Xml" />
         <Reference Include="TrackerEnabledDbContext, Version=3.7.0.0, Culture=neutral, PublicKeyToken=4f92af0b908c4a0a">
           <HintPath>..\packages\TrackerEnabledDbContext.3.8.3\lib\net45\TrackerEnabledDbContext.dll</HintPath>
@@ -65,7 +66,6 @@
         <Compile Include="Builder\RoleBuilder.cs" />
         <Compile Include="Builder\UserBuilder.cs" />
         <Compile Include="Context\DatabaseContext.cs" />
-        <Compile Include="Context\DatabaseContextAuditTrail.cs" />
         <Compile Include="Context\DatabaseContextSeed.cs" />
         <Compile Include="Interfaces\IDatabaseContext.cs" />
         <Compile Include="Migration Guid\Configuration.cs" />
@@ -81,6 +81,7 @@
         <Compile Include="Repository\Company\CompanyRepository.cs" />
         <Compile Include="Repository\Experiment\ExperimentRepository.cs" />
         <Compile Include="Repository\GenericCrudRepository.cs" />
+        <Compile Include="Repository\Interfaces\IAuditTrailRepository.cs" />
         <Compile Include="Repository\Interfaces\IGenericCRUDRepository.cs" />
         <Compile Include="Repository\Interfaces\IGenericRelationshipRepository.cs" />
         <Compile Include="Repository\Interfaces\ISaveTypes.cs" />

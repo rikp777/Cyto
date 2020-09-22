@@ -46,7 +46,12 @@
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
         <Reference Include="System.Net.Http" />
+        <Reference Include="System.Web" />
         <Reference Include="System.Xml" />
+        <Reference Include="TrackerEnabledDbContext.Common, Version=3.7.0.0, Culture=neutral, PublicKeyToken=4f92af0b908c4a0a">
+          <HintPath>..\packages\TrackerEnabledDbContext.Common.3.7\lib\net45\TrackerEnabledDbContext.Common.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using DAL.Context;
 using DAL.Repository.Permission;
 using Domain.Entities;
@@ -26,14 +27,14 @@ namespace LOGIC.Services.Permission
             .ToList();
 
 
-        public bool Create(PermissionRequest entity) => _permissionRepository
+        public bool Create(PermissionRequest entity, HttpContext current) => _permissionRepository
             .Create(PermissionRequest.ToEntity(entity));
 
 
-        public bool Update(int id, PermissionRequest entity) => _permissionRepository
+        public bool Update(int id, PermissionRequest entity, HttpContext current) => _permissionRepository
             .Update(id, PermissionRequest.ToEntity(entity));
 
 
-        public bool Delete(int id) => _permissionRepository.Delete(id);
+        public bool Delete(int id, HttpContext current) => _permissionRepository.Delete(id);
     }
 }

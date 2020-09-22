@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Web;
 using DAL.Context;
 using DAL.Interfaces;
 using DAL.Repository.Company;
@@ -28,45 +29,77 @@ namespace LOGIC.Services.Experiment
             DatabaseContext context = new DatabaseContext();
             _userRepository = new UserRepository(context);
             _companyRepository = new CompanyRepository(context);
-            _auditTrailService = new AuditTrailService(context);
-
             _experimentRepository = new ExperimentRepository(context);
         }
-
+        
         public ExperimentService(IDatabaseContext context)
         {
             _experimentRepository = new ExperimentRepository(context);
         }
+        
 
         public ExperimentResource GetById(int id)
         {
             var experimentEntity = _experimentRepository.GetById(id);
             return experimentEntity == null ? null : ExperimentResource.FromEntity(experimentEntity);
         }
-
-        public List<ExperimentResource> GetAll(int size, int page) => _experimentRepository
-            .GetAll()
-            .Select(ExperimentResource.FromEntity)
-            .ToList();
-
-        public bool Create(ExperimentRequest entity) => _experimentRepository.Create(ExperimentRequest.ToEntity(entity));
-        public bool Update(int id, ExperimentRequest entity)
+        public List<ExperimentResource> GetAll(int size, int page)
         {
-            var user = _userRepository.GetById(2);
-            var entityOld = _experimentRepository.GetById(id, new List<string>(){"Project.Company"});
-            var company = entityOld.Project.Company;
+            return _experimentRepository
+                .GetAll()
+                .Select(ExperimentResource.FromEntity)
+                .ToList();
+        } 
 
+        public bool Create(ExperimentRequest entity, HttpContext current)
+        {
+            var auditMetaData = new AuditTrailMetaData()
+            {
+                User = _userRepository.GetById(1),
+                Company = _companyRepository.GetById(1),
+                RequestMethod = current.Request.HttpMethod,
+                RequestBaseUrl = current.Request.ToString()
+            };
             
+            var success = false;
+            success = _experimentRepository.Create(ExperimentRequest.ToEntity(entity));
+            success = _experimentRepository.SaveChanges(auditMetaData) > 0;
+            return success;
+        } 
+        public bool Update(int id, ExperimentRequest entity, HttpContext current)
+        {
+            //var entityOld = _experimentRepository.GetById(id, new List<string>(){"Project.Company"});
+            //var company = entityOld.Project.Company;
+            var auditMetaData = new AuditTrailMetaData()
+            {
+                User = _userRepository.GetById(1),
+                Company = _companyRepository.GetById(1),
+                RequestMethod = current.Request.HttpMethod,
+                RequestBaseUrl = current.Request.ToString()
+            };
+            
+
             var update = ExperimentRequest.ToEntity(entity);
             update.Id = id;
+
             
-            _experimentRepository.Update(id, update);
-            _experimentRepository.SaveChanges(user, company);
-            
-            return true;
+            var success = false;
+            success = _experimentRepository.Update(id, update);
+            success = _experimentRepository.SaveChanges(auditMetaData) > 0;
+            return success;
+        }
+        public bool Delete(int id, HttpContext current)
+        {
+            var auditMetaData = new AuditTrailMetaData()
+            {
+                User = _userRepository.GetById(1),
+                Company = _companyRepository.GetById(1),
+                RequestMethod = current.Request.HttpMethod,
+                RequestBaseUrl = current.Request.ToString()
+            };
+
+            _experimentRepository.Delete(id);
+            return _experimentRepository.SaveChanges(auditMetaData) > 0;
         } 
-        
-        
-        public bool Delete(int id) => _experimentRepository.Delete(id);
     }
 }

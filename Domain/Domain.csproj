@@ -65,6 +65,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Audit\AuditActionType.cs" />
+        <Compile Include="Audit\AuditTrailMetaData.cs" />
         <Compile Include="Contracts\IBaseEntity.cs" />
         <Compile Include="Entities\AuditTrailChangeLogEntity.cs" />
         <Compile Include="Entities\AuditTrailEntity.cs" />

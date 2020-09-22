@@ -26,5 +26,6 @@ namespace DAL.Repository.User
             var data = _dbSet.SingleOrDefault(user => user.Email == email);
             return data;
         }
+        
     }
 }

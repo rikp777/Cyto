@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using DAL.Context;
 using DAL.Repository.Project;
 using Domain.Entities;
@@ -25,15 +26,15 @@ namespace LOGIC.Services.Project
             .Select(ProjectResource.FromEntity)
             .ToList();
 
-        public bool Create(ProjectRequest entity) => _projectRepository
+        public bool Create(ProjectRequest entity, HttpContext current) => _projectRepository
             .Create(ProjectRequest.ToEntity(entity));
 
 
-        public bool Update(int id, ProjectRequest entity) => _projectRepository
+        public bool Update(int id, ProjectRequest entity, HttpContext current) => _projectRepository
             .Update(id, ProjectRequest.ToEntity(entity));
 
 
-        public bool Delete(int id) => _projectRepository
+        public bool Delete(int id, HttpContext current) => _projectRepository
             .Delete(id);
     }
 }

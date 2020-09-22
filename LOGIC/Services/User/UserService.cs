@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using DAL.Context;
 using DAL.Repository.User;
 using Domain.Entities;
@@ -31,15 +32,15 @@ namespace LOGIC.Services.User
             .ToList();
 
 
-        public bool Create(UserRequest user) => _userRepository
+        public bool Create(UserRequest user, HttpContext current) => _userRepository
             .Create(UserRequest.ToEntity(user));
 
 
-        public bool Update(int id, UserRequest user) => _userRepository
+        public bool Update(int id, UserRequest user, HttpContext current) => _userRepository
             .Update(id, UserRequest.ToEntity(user));
 
 
-        public bool Delete(int id) => _userRepository
+        public bool Delete(int id, HttpContext current) => _userRepository
             .Delete(id);
 
         public UserResource GetByName(string name)

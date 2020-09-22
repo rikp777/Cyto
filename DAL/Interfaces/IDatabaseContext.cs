@@ -5,7 +5,7 @@ using TrackerEnabledDbContext.Common.Interfaces;
 
 namespace DAL.Interfaces
 {
-    public interface IDatabaseContext 
+    public interface IDatabaseContext : IDbContext 
     {
         DbSet<RoleEntity> Roles { get; set; }
         DbSet<UserEntity> Users { get; set; }
@@ -15,8 +15,8 @@ namespace DAL.Interfaces
         DbSet<ProjectEntity> Projects { get; set; }
         DbSet<AuditTrailEntity> AuditTrails { get; set; }
         DbSet<AuditTrailChangeLogEntity> AuditTrailChangeLogs { get; set; }
-
-        int SaveChanges();
-        int SaveChanges(UserEntity user, CompanyEntity company);
+        
+        void MarkAsModified(BaseEntity entity);    
+        EntityState GetState(BaseEntity entity);  
     }
 }
