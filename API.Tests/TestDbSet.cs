@@ -47,6 +47,7 @@ namespace API.Tests
 
         public override T Attach(T item)
         {
+            _data.Remove(_data.First(i => i.Id == item.Id));
             _data.Add(item);
             return item;
         }

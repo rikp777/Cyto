@@ -21,15 +21,13 @@ namespace LOGIC.Services.Company
         private readonly CompanyRepository _companyRepository;
         private readonly AuditTrailService _auditTrailService;
         private readonly UserRepository _userRepository;
-        
+
         public CompanyService(IDatabaseContext context)
         {
             _companyRepository = new CompanyRepository(context);
             _auditTrailService = new AuditTrailService(context);
             _userRepository = new UserRepository(context);
         }
-        
- 
 
 
         public CompanyResource GetById(int id)
@@ -37,37 +35,47 @@ namespace LOGIC.Services.Company
             var companyEntity = _companyRepository.GetById(id);
             return companyEntity == null ? null : CompanyResource.FromEntity(companyEntity);
         }
-        
+
         public List<CompanyResource> GetAll(int size, int page) => _companyRepository
             .GetAll()
             .Select(CompanyResource.FromEntity)
             .ToList();
 
-        public bool Create(CompanyRequest entity, HttpContext current = null) => _companyRepository.Create(CompanyRequest.ToEntity(entity));
+        public bool Create(CompanyRequest entity, HttpContext current = null) =>
+            _companyRepository.Create(CompanyRequest.ToEntity(entity));
 
-        public bool Update(int id, CompanyRequest entity, HttpContext current = null)
+        public bool Update(int id, CompanyRequest companyRequest, HttpContext current = null)
         {
-            
             //var entityOld = _companyRepository.GetById(id);
             //var entityNew = CompanyRequest.ToEntity(entity);
             //var authUser = _userRepository.GetById(1);
-           // var company = _companyRepository.GetById(1);
+            // var company = _companyRepository.GetById(1);
 
             //List<AuditTrailChangeLogEntity> changes = new List<AuditTrailChangeLogEntity>();
 
             //var one = new AuditTrailChangeLogEntity("Name", entityOld.Name, entityNew.Name);
             //if (one.Changed) changes.Add(one);
-            
+
             //var two = new AuditTrailChangeLogEntity("Description", entityOld.Description, entityNew.Description);
             //if (two.Changed) changes.Add(two);
-            
-            var update = CompanyRequest.ToEntity(entity);
-            update.Id = id;
-             bool success = _companyRepository.Update(id, update);
-             //if (success) _auditTrailService.Capture(authUser, company, null, (AuditActionType) 1, "CompanyService", "Update", entityOld.Id.ToString(), entityOld, changes);
+
+            var companyOld = _companyRepository.GetById(id);
+            if (companyRequest.Name != null)
+            {
+                companyOld.Name = companyRequest.Name;
+            }
+
+            if (companyRequest.Description != null)
+            {
+                companyOld.Description = companyRequest.Description;
+            }
+
+            bool success = _companyRepository.Update(id, companyOld);
+            //if (success) _auditTrailService.Capture(authUser, company, null, (AuditActionType) 1, "CompanyService", "Update", entityOld.Id.ToString(), entityOld, changes);
 
             return true;
-        } 
+        }
+
         public bool Delete(int id, HttpContext current = null) => _companyRepository.Delete(id);
 
         public CompanyResource GetByName(string name)

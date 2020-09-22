@@ -49,7 +49,7 @@ namespace API.Tests
 
         public int SaveChanges()
         {
-            throw new NotImplementedException();
+            return 1;
         }
 
         public Task<int> SaveChangesAsync()
@@ -78,15 +78,11 @@ namespace API.Tests
 
         public Database Database => _databaseContextImplementation.Database;
 
-        public int SaveChanges(UserEntity user, CompanyEntity company)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Save()
-        {
-            return true;
-        }
+        // public int SaveChanges(UserEntity user, CompanyEntity company)
+        // {
+        //     throw new NotImplementedException();
+        // }
+     
 
         public void MarkAsModified(BaseEntity item) { }
         public EntityState GetState(BaseEntity entity)
