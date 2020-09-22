@@ -35,6 +35,10 @@ namespace DAL.Repository.AuditTrail
         
         private List<AuditTrailChangeLogEntity> GetChanges()
         {
+            //_context.
+           // var myObjectState= _context.ObjectStateManager.GetObjectStateEntry(myObject);
+            //var modifiedProperties=myObjectState.GetModifiedProperties();
+            
             var changes = new List<AuditTrailChangeLogEntity>();
             var modifiedEntities = _context.ChangeTracker.Entries()
                 .Where(p => p.State == EntityState.Modified)
@@ -46,7 +50,7 @@ namespace DAL.Repository.AuditTrail
                 {
                     foreach(var columnName in change.OriginalValues.PropertyNames)
                     {
-                        var originalValue = change.OriginalValues[columnName].ToString();
+                        var originalValue = change.GetDatabaseValues().GetValue<object>(columnName).ToString();
                         var currentValue = change.CurrentValues[columnName].ToString();
                         if (originalValue != currentValue)
                         {

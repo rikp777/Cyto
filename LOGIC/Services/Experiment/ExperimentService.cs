@@ -71,7 +71,7 @@ namespace LOGIC.Services.Experiment
         } 
         public bool Update(int id, ExperimentRequest entity, HttpContext current)
         {
-            //var entityOld = _experimentRepository.GetById(id, new List<string>(){"Project.Company"});
+            var entityOld = _experimentRepository.GetById(id, new List<string>(){"Project.Company"});
             //var company = entityOld.Project.Company;
             var auditMetaData = new AuditTrailMetaData()
             {
@@ -81,14 +81,14 @@ namespace LOGIC.Services.Experiment
                 RequestMethod = current.Request.HttpMethod,
                 RequestBaseUrl = current.Request.Path
             };
-            
-
-            var update = ExperimentRequest.ToEntity(entity);
-           update.Id = id;
+            //var update = ExperimentRequest.ToEntity(entity);
+           //update.Id = id;
+           entityOld.Name = entity.Name;
+           entityOld.Description = entity.Description;
 
             
             var success = false;
-            success = _experimentRepository.Update(id, update);
+            success = _experimentRepository.Update(id, entityOld);
             success = _experimentRepository.SaveChanges(auditMetaData);
             return success;
         }

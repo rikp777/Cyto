@@ -101,9 +101,9 @@ namespace DAL.Repository
         
         public bool Update(int id, TEntity entityToUpdate)
         {
+            //var en = _dbSet.First(e => e.Id == id);
             _dbSet.Attach(entityToUpdate);
             _context.Entry(entityToUpdate).State = EntityState.Modified;
-            
             //_context.Entry(entityToUpdate).Reload();
             //var after = _context.Experiments;
             return true;
