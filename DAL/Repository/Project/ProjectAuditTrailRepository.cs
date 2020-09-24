@@ -4,37 +4,40 @@ using System.Linq;
 using DAL.Context;
 using Domain.Entities;
 
-namespace DAL.Repository.AuditTrail
+namespace DAL.Repository.Project
 {
-    public class CompanyAuditTrailRepository
+    public class ProjectAuditTrailRepository
     {
         private readonly DatabaseContext _context;
         private readonly DbSet<CompanyEntity> _dbSetCompanies;
         private readonly DbSet<AuditTrailEntity> _dbSetAuditTrails;
 
-        public CompanyAuditTrailRepository(DatabaseContext context)
+        public ProjectAuditTrailRepository(DatabaseContext context)
         {
             this._context = context;
             this._dbSetCompanies = context.Set<CompanyEntity>();
             this._dbSetAuditTrails = context.Set<AuditTrailEntity>();
         }
 
-        public AuditTrailEntity GetById(int companyId, int auditTrailId)
+        public AuditTrailEntity GetById(int projectId, int auditTrailId)
         {
             var audit = _dbSetAuditTrails
-                .Where(x => x.Company.Id == companyId)
+                .Where(x => x.Identifier == "Project")
+                .Where(x => x.PrimaryKey == projectId.ToString())
+                .Where(x =>x.Id == auditTrailId)
                 .Include(x => x.Company)
                 .Include(x => x.User)
                 .First(x => x.Id == auditTrailId);
             return audit;
         }
 
-        public List<AuditTrailEntity> GetAll(int companyId)
+        public List<AuditTrailEntity> GetAll(int projectId)
         {
             var audits = _dbSetAuditTrails
-               .Where(a => a.Company.Id == companyId)
-               .Include(x => x.Company)
-               .Include(x => x.User);
+                .Where(x => x.Identifier == "Project")
+                .Where(x => x.PrimaryKey == projectId.ToString())
+                .Include(x => x.Company)
+                .Include(x => x.User);
 
             return audits.ToList();
         }

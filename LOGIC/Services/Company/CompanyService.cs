@@ -10,7 +10,6 @@ using Domain.Audit;
 using Domain.Entities;
 using Domain.Requests;
 using Domain.Resources;
-using LOGIC.Services.Audit_Trail;
 using LOGIC.Services.Interfaces;
 using LOGIC.Services.User;
 
@@ -19,13 +18,11 @@ namespace LOGIC.Services.Company
     public class CompanyService : IGenericCrudService<CompanyResource, CompanyRequest>
     {
         private readonly CompanyRepository _companyRepository;
-        private readonly AuditTrailService _auditTrailService;
         private readonly UserRepository _userRepository;
 
         public CompanyService(IDatabaseContext context)
         {
             _companyRepository = new CompanyRepository(context);
-            _auditTrailService = new AuditTrailService(context);
             _userRepository = new UserRepository(context);
         }
 

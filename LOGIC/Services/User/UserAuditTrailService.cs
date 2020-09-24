@@ -5,11 +5,12 @@ using System.Linq;
 using DAL.Context;
 using DAL.Migrations;
 using DAL.Repository.AuditTrail;
+using DAL.Repository.User;
 using Domain.Audit;
 using Domain.Entities;
 using Domain.Resources;
 
-namespace LOGIC.Services.Audit_Trail
+namespace LOGIC.Services.User
 {
     public class UserAuditTrailService
     {

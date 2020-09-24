@@ -9,5 +9,6 @@ namespace Domain.Audit
         public PermissionEntity Permission = null;
         public string RequestBaseUrl;
         public string RequestMethod;
+        public string RequestIpAddress;
     }
 }

@@ -174,10 +174,12 @@
     <Compile Include="Controllers\Company\CompanyAuditTrailController.cs" />
     <Compile Include="Controllers\Company\CompanyController.cs" />
     <Compile Include="Controllers\Company\CompanyProjectController.cs" />
+    <Compile Include="Controllers\Experiment\ExperimentAuditTrailController.cs" />
     <Compile Include="Controllers\Experiment\ExperimentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Interfaces\IGenericCrudController.cs" />
     <Compile Include="Controllers\Permission\PermissionController.cs" />
+    <Compile Include="Controllers\Project\ProjectAuditTrailController.cs" />
     <Compile Include="Controllers\Project\ProjectController.cs" />
     <Compile Include="Controllers\Project\ProjectExperimentController.cs" />
     <Compile Include="Controllers\Role\RoleController.cs" />

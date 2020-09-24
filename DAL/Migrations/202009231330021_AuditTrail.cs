@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class changes : DbMigration
+    public partial class AuditTrail : DbMigration
     {
         public override void Up()
         {
@@ -26,7 +26,7 @@
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        TableName = c.String(),
+                        Identifier = c.String(),
                         PrimaryKey = c.String(),
                         CreatedAt = c.String(),
                         RequestBaseUrl = c.String(),

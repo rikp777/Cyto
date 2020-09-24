@@ -13,12 +13,11 @@ namespace Domain.Entities
         public virtual PermissionEntity Permission { get; set; }
 
 
-        public string TableName { get; set; }
+        public string Identifier { get; set; }
         public string PrimaryKey { get; set; }
         public virtual ICollection<AuditTrailChangeLogEntity> AuditTrailChangeLog { get; set; }
 
         public string CreatedAt { get; set; }
-        
         public string RequestBaseUrl { get; set; }
         public string RequestMethod { get; set; }
         public string RequestMethodColor { get; set; } // Indication color 

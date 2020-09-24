@@ -55,19 +55,20 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="Services\Audit Trail\AuditTrailService.cs" />
-        <Compile Include="Services\Audit Trail\CompanyAuditTrailService.cs" />
-        <Compile Include="Services\Audit Trail\UserAuditTrailService.cs" />
+        <Compile Include="Services\Company\CompanyAuditTrailService.cs" />
         <Compile Include="Services\Company\CompanyProjectService.cs" />
         <Compile Include="Services\Company\CompanyService.cs" />
+        <Compile Include="Services\Experiment\ExperimentAuditTrailService.cs" />
         <Compile Include="Services\Experiment\ExperimentService.cs" />
         <Compile Include="Services\Interfaces\IGenericCrudService.cs" />
         <Compile Include="Services\Interfaces\IGenericRelationshipService.cs" />
         <Compile Include="Services\Permission\PermissionService.cs" />
+        <Compile Include="Services\Project\ProjectAuditTrailService.cs" />
         <Compile Include="Services\Project\ProjectExperimentService.cs" />
         <Compile Include="Services\Project\ProjectService.cs" />
         <Compile Include="Services\Role\RolePermissionService.cs" />
         <Compile Include="Services\Role\RoleService.cs" />
+        <Compile Include="Services\User\UserAuditTrailService.cs" />
         <Compile Include="Services\User\UserCompanyService.cs" />
         <Compile Include="Services\User\UserProjectService.cs" />
         <Compile Include="Services\User\UserRoleService.cs" />

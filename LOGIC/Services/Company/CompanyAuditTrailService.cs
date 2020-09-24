@@ -2,9 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using DAL.Context;
 using DAL.Repository.AuditTrail;
+using DAL.Repository.Company;
 using Domain.Resources;
 
-namespace LOGIC.Services.Audit_Trail
+namespace LOGIC.Services.Company
 {
     public class CompanyAuditTrailService
     {

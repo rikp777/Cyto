@@ -22,7 +22,7 @@ namespace DAL.Repository.Experiment
         public ExperimentRepository(IDatabaseContext context) : base(context, context.Experiments)
         {
             _context = context;
-            _auditTrailRepository = new AuditTrailRepository(context);
+            _auditTrailRepository = new AuditTrailRepository(context, "Experiment");
         }
 
         public bool SaveChanges(AuditTrailMetaData auditTrailMetaData)

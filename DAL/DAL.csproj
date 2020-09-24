@@ -68,16 +68,16 @@
         <Compile Include="Context\DatabaseContext.cs" />
         <Compile Include="Context\DatabaseContextSeed.cs" />
         <Compile Include="Interfaces\IDatabaseContext.cs" />
-        <Compile Include="Migrations\202009221207348_changes.cs" />
-        <Compile Include="Migrations\202009221207348_changes.Designer.cs">
-          <DependentUpon>202009221207348_changes.cs</DependentUpon>
+        <Compile Include="Migrations\202009231330021_AuditTrail.cs" />
+        <Compile Include="Migrations\202009231330021_AuditTrail.Designer.cs">
+          <DependentUpon>202009231330021_AuditTrail.cs</DependentUpon>
         </Compile>
         <Compile Include="Migrations\Configuration.cs" />
         <Compile Include="Repository\AuditTrail\AuditTrailRepository.cs" />
-        <Compile Include="Repository\AuditTrail\CompanyAuditTrailRepository.cs" />
-        <Compile Include="Repository\AuditTrail\UserAuditTrailRepository.cs" />
+        <Compile Include="Repository\Company\CompanyAuditTrailRepository.cs" />
         <Compile Include="Repository\Company\CompanyProjectRepository.cs" />
         <Compile Include="Repository\Company\CompanyRepository.cs" />
+        <Compile Include="Repository\Experiment\ExperimentAuditTrailRepository.cs" />
         <Compile Include="Repository\Experiment\ExperimentRepository.cs" />
         <Compile Include="Repository\GenericCrudRepository.cs" />
         <Compile Include="Repository\Interfaces\IAuditTrailRepository.cs" />
@@ -85,10 +85,12 @@
         <Compile Include="Repository\Interfaces\IGenericRelationshipRepository.cs" />
         <Compile Include="Repository\Interfaces\ISaveTypes.cs" />
         <Compile Include="Repository\Permission\PermissionRepository.cs" />
+        <Compile Include="Repository\Project\ProjectAuditTrailRepository.cs" />
         <Compile Include="Repository\Project\ProjectExperimentRepository.cs" />
         <Compile Include="Repository\Project\ProjectRepository.cs" />
         <Compile Include="Repository\Role\RolePermissionRepository.cs" />
         <Compile Include="Repository\Role\RoleRepository.cs" />
+        <Compile Include="Repository\User\UserAuditTrailRepository.cs" />
         <Compile Include="Repository\User\UserCompanyRepository.cs" />
         <Compile Include="Repository\User\UserProjectRepository.cs" />
         <Compile Include="Repository\User\UserRepository.cs" />
@@ -111,8 +113,8 @@
       </ProjectReference>
     </ItemGroup>
     <ItemGroup>
-      <EmbeddedResource Include="Migrations\202009221207348_changes.resx">
-        <DependentUpon>202009221207348_changes.cs</DependentUpon>
+      <EmbeddedResource Include="Migrations\202009231330021_AuditTrail.resx">
+        <DependentUpon>202009231330021_AuditTrail.cs</DependentUpon>
       </EmbeddedResource>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

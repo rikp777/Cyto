@@ -1,4 +1,5 @@
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using Domain.Contracts;
 using Domain.Entities;
 using TrackerEnabledDbContext.Common.Interfaces;
@@ -17,6 +18,6 @@ namespace DAL.Interfaces
         DbSet<AuditTrailChangeLogEntity> AuditTrailChangeLogs { get; set; }
         
         void MarkAsModified(BaseEntity entity);    
-        EntityState GetState(BaseEntity entity);  
+        EntityState GetState(BaseEntity entity);
     }
 }

@@ -1,3 +1,4 @@
+using System.Web;
 using System.Web.Http;
 using Domain.Requests;
 using LOGIC.Services.Permission;
@@ -36,7 +37,7 @@ namespace API.Controllers.Project
         [Route("projects")]
         public IHttpActionResult Create(ProjectRequest entity)
         {
-            var result = _projectService.Create(entity);
+            var result = _projectService.Create(entity, HttpContext.Current);
             return Ok(result);
         }
 
@@ -44,7 +45,7 @@ namespace API.Controllers.Project
         [Route("projects/{id}")]
         public IHttpActionResult Update(int id, ProjectRequest entity)
         {
-            var result = _projectService.Update(id, entity);
+            var result = _projectService.Update(id, entity, HttpContext.Current);
             return Ok(result);
         }
 
@@ -52,7 +53,7 @@ namespace API.Controllers.Project
         [Route("projects/{id}")]
         public IHttpActionResult Delete(int id)
         {
-            var result = _projectService.Delete(id);
+            var result = _projectService.Delete(id, HttpContext.Current);
             return Ok(result);
         }
     }

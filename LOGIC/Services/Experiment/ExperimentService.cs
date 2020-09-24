@@ -11,7 +11,6 @@ using Domain.Audit;
 using Domain.Entities;
 using Domain.Requests;
 using Domain.Resources;
-using LOGIC.Services.Audit_Trail;
 using LOGIC.Services.Interfaces;
 
 namespace LOGIC.Services.Experiment
@@ -21,12 +20,11 @@ namespace LOGIC.Services.Experiment
 
         private readonly ExperimentRepository _experimentRepository;
         private readonly CompanyRepository _companyRepository;
-        private readonly AuditTrailService _auditTrailService;
         private readonly UserRepository _userRepository;
         
         public ExperimentService()
         {
-            DatabaseContext context = new DatabaseContext();
+            var context = new DatabaseContext();
             _userRepository = new UserRepository(context);
             _companyRepository = new CompanyRepository(context);
             _experimentRepository = new ExperimentRepository(context);
@@ -61,7 +59,8 @@ namespace LOGIC.Services.Experiment
                 User = _userRepository.GetById(1),
                 Company = _companyRepository.GetById(1),
                 RequestMethod = current.Request.HttpMethod,
-                RequestBaseUrl = current.Request.ToString()
+                RequestBaseUrl = current.Request.ToString(),
+                RequestIpAddress = current.Request.UserHostAddress
             };
             
             var success = false;
@@ -79,7 +78,8 @@ namespace LOGIC.Services.Experiment
                 Company = _companyRepository.GetById(1),
                 Permission = new PermissionEntity(),
                 RequestMethod = current.Request.HttpMethod,
-                RequestBaseUrl = current.Request.Path
+                RequestBaseUrl = current.Request.Path,
+                RequestIpAddress = current.Request.UserHostAddress
             };
             //var update = ExperimentRequest.ToEntity(entity);
            //update.Id = id;
@@ -99,7 +99,8 @@ namespace LOGIC.Services.Experiment
                 User = _userRepository.GetById(1),
                 Company = _companyRepository.GetById(1),
                 RequestMethod = current.Request.HttpMethod,
-                RequestBaseUrl = current.Request.ToString()
+                RequestBaseUrl = current.Request.ToString(),
+                RequestIpAddress = current.Request.UserHostAddress
             };
 
             _experimentRepository.Delete(id);

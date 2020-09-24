@@ -5,6 +5,8 @@ using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using DAL.Context;
 using DAL.Interfaces;
 using DAL.Repository.Interfaces;
@@ -16,21 +18,23 @@ namespace DAL.Repository.AuditTrail
     public class AuditTrailRepository : IAuditTrailRepository
     {
         private readonly IDatabaseContext _context;
-
-        public AuditTrailRepository(IDatabaseContext context)
+        private readonly string _identifier; 
+        
+        public AuditTrailRepository(IDatabaseContext context, string identifier)
         {
             this._context = context;
+            this._identifier = identifier;
         }
-        
+
         private string GetPrimaryKey(ObjectStateEntry state)
         {
             _context.SaveChanges();
             return state.EntityKey.EntityKeyValues[0].Value.ToString();
         }
-
+        
         private string GetTableName(ObjectStateEntry state)
         {
-            return state.Entity.GetType().Name;
+            return _identifier;
         }
         
         private List<AuditTrailChangeLogEntity> GetChanges()
@@ -78,6 +82,7 @@ namespace DAL.Repository.AuditTrail
             var permission = auditTrailMetaData.Permission;
             var requestMethod = auditTrailMetaData.RequestMethod;
             var requestBaseUrl = auditTrailMetaData.RequestBaseUrl;
+            var requestIpAddress = auditTrailMetaData.RequestIpAddress;
             
             
             var now = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
@@ -86,6 +91,7 @@ namespace DAL.Repository.AuditTrail
             if (user == null) throw new Exception("AuditTrail Error: User is mandatory");
             if (company == null) throw new Exception("AuditTrail Error: Company is mandatory");
             if (permission == null) throw new Exception("AuditTrail Error: Permission is mandatory");
+            if (requestIpAddress == null) requestIpAddress = "Not specified";
             if (requestMethod == null) requestMethod = "Not specified";
             if (requestBaseUrl == null) requestBaseUrl = "Not specified";
             
@@ -109,8 +115,9 @@ namespace DAL.Repository.AuditTrail
                             RequestBaseUrl = requestBaseUrl,
                             RequestMethod = requestMethod,
                             RequestMethodColor = "Green",
+                            IpAddress = requestIpAddress,
 
-                            TableName = GetTableName(state),
+                            Identifier = GetTableName(state),
                             PrimaryKey = GetPrimaryKey(state),
                 
                             CreatedAt = now
@@ -131,10 +138,11 @@ namespace DAL.Repository.AuditTrail
                             RequestBaseUrl = requestBaseUrl,
                             RequestMethod = requestMethod,
                             RequestMethodColor = "Green",
+                            IpAddress = requestIpAddress,
                             
                             AuditTrailChangeLog = logs,
 
-                            TableName = GetTableName(state),
+                            Identifier = GetTableName(state),
                             PrimaryKey = GetPrimaryKey(state),
                             
                             CreatedAt = now.ToString(CultureInfo.InvariantCulture),
@@ -153,8 +161,9 @@ namespace DAL.Repository.AuditTrail
                             RequestBaseUrl = requestBaseUrl,
                             RequestMethod = requestMethod,
                             RequestMethodColor = "Red",
+                            IpAddress = requestIpAddress,
 
-                            TableName = GetTableName(state),
+                            Identifier = GetTableName(state),
                             PrimaryKey = GetPrimaryKey(state),
                 
                             CreatedAt = now

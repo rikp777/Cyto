@@ -1,6 +1,6 @@
 using System.Web.Http;
 using DAL.Context;
-using LOGIC.Services.Audit_Trail;
+using LOGIC.Services.User;
 
 namespace API.Controllers.User
 {

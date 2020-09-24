@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using DAL.Context;
 using Domain.Entities;
 
-namespace DAL.Repository.AuditTrail
+namespace DAL.Repository.User
 {
     public class UserAuditTrailRepository
     {
