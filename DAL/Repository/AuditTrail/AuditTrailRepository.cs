@@ -48,26 +48,25 @@ namespace DAL.Repository.AuditTrail
                 .Where(p => p.State == EntityState.Modified)
                 .ToList();
 
-            if (modifiedEntities.Count > 0)
+            if (modifiedEntities.Count <= 0) return changes;
+            
+            foreach (var change in modifiedEntities)
             {
-                foreach (var change in modifiedEntities)
+                foreach(var columnName in change.OriginalValues.PropertyNames)
                 {
-                    foreach(var columnName in change.OriginalValues.PropertyNames)
+                    var originalValue = change.GetDatabaseValues().GetValue<object>(columnName).ToString();
+                    var currentValue = change.CurrentValues[columnName].ToString();
+                    if (originalValue != currentValue)
                     {
-                        var originalValue = change.GetDatabaseValues().GetValue<object>(columnName).ToString();
-                        var currentValue = change.CurrentValues[columnName].ToString();
-                        if (originalValue != currentValue)
+                        var auditChangeLog = new AuditTrailChangeLogEntity
                         {
-                            var auditChangeLog = new AuditTrailChangeLogEntity
-                            {
-                                ColumnName = columnName,
-                                ValueBefore = originalValue, 
-                                ValueAfter = currentValue
-                            };
-                            changes.Add(auditChangeLog);
+                            ColumnName = columnName,
+                            ValueBefore = originalValue, 
+                            ValueAfter = currentValue
+                        };
+                        changes.Add(auditChangeLog);
                         
-                            Console.WriteLine(@"Audit Trail: 'Value Changed': [Original value: " + originalValue + @"] - [Current value: " + currentValue + @"] - [Column name: " + columnName + @"]");
-                        }
+                        Console.WriteLine(@"Audit Trail: 'Value Changed': [Original value: " + originalValue + @"] - [Current value: " + currentValue + @"] - [Column name: " + columnName + @"]");
                     }
                 }
             }
@@ -137,7 +136,7 @@ namespace DAL.Repository.AuditTrail
                 
                             RequestBaseUrl = requestBaseUrl,
                             RequestMethod = requestMethod,
-                            RequestMethodColor = "Green",
+                            RequestMethodColor = "Yellow",
                             IpAddress = requestIpAddress,
                             
                             AuditTrailChangeLog = logs,
