@@ -1,8 +1,6 @@
 using System.IO;
 using System.Web;
 using System.Web.SessionState;
-using Moq;
-
 
 namespace API.Tests
 {
