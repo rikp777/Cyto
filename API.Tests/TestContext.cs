@@ -5,14 +5,13 @@ using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Threading;
 using System.Threading.Tasks;
-using DAL.Context;
 using DAL.Interfaces;
 using Domain.Contracts;
 using Domain.Entities;
 
 namespace API.Tests
 {
-    public class TestContext : IDatabaseContext 
+    public class TestContext : IDatabaseContext
     {
         private IDatabaseContext _databaseContextImplementation;
 
@@ -21,6 +20,8 @@ namespace API.Tests
             Companies = new TestDbSet<CompanyEntity>();
             Projects = new TestDbSet<ProjectEntity>();
             Experiments = new TestDbSet<ExperimentEntity>();
+            Users = new TestDbSet<UserEntity>();
+            Permissions = new TestDbSet<PermissionEntity>();
         }
 
 
@@ -32,6 +33,7 @@ namespace API.Tests
         public DbSet<ProjectEntity> Projects { get; set; }
         public DbSet<AuditTrailEntity> AuditTrails { get; set; }
         public DbSet<AuditTrailChangeLogEntity> AuditTrailChangeLogs { get; set; }
+
         public DbEntityEntry Entry(object entity)
         {
             return _databaseContextImplementation.Entry(entity);
@@ -82,14 +84,19 @@ namespace API.Tests
         // {
         //     throw new NotImplementedException();
         // }
-     
 
-        public void MarkAsModified(BaseEntity item) { }
+
+        public void MarkAsModified(BaseEntity item)
+        {
+        }
+
         public EntityState GetState(BaseEntity entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Dispose() { }
+        public void Dispose()
+        {
+        }
     }
 }
