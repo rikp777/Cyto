@@ -26,7 +26,7 @@ namespace API.Controllers.Company
         [Route("companies")]
         public IHttpActionResult GetAll()
         {
-            var results = _companyService.GetAll(1,1);
+            var results = _companyService.GetAll();
             if (results.Count == 0) return Ok("There are no companies found");
 
             return Ok(results);
@@ -46,11 +46,15 @@ namespace API.Controllers.Company
         [Route("companies")]
         public IHttpActionResult Create([FromBody] CompanyRequest companyToCreate)
         {
-            if (companyToCreate == null) return BadRequest("Empty request body!");
-            if (companyToCreate.Name == null)
-                return BadRequest("You cannot create a company without specifying the name");
-            if (companyToCreate.Description == null)
-                return BadRequest("You cannot create a company without specifying the description");
+            if (companyToCreate == null)
+            {
+                return BadRequest("Empty request body!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ControllerHelper.GetModelStateErrorMessages(ModelState));
+            }
 
             var temp = _companyService.GetByName(companyToCreate.Name);
 
@@ -64,7 +68,15 @@ namespace API.Controllers.Company
         [Route("companies/{id}")]
         public IHttpActionResult Update(int id, CompanyRequest companyRequest)
         {
-            if (companyRequest == null) return BadRequest("Empty request body!");
+            if (companyRequest == null)
+            {
+                return BadRequest("Empty request body!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ControllerHelper.GetModelStateErrorMessages(ModelState));
+            }
 
             var company = _companyService.GetById(id);
             if (company == null) return NotFound();

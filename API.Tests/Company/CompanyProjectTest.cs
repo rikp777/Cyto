@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Web.Http.Results;
 using API.Controllers.Company;
@@ -11,27 +10,34 @@ namespace API.Tests.Company
     [TestFixture]
     public class CompanyProjectTest
     {
+        private TestContext _context;
+        private CompanyProjectController _controller;
+
+        [SetUp]
+        public void Init()
+        {
+            _context = new TestContext();
+            _controller = new CompanyProjectController(_context);
+        }
+
         [Test]
         public void GetAllProjectsOfCompany_GoodWeather()
         {
-            var context = new TestContext();
-            var controller = new CompanyProjectController(context);
-
             var company = new CompanyEntity()
                 {Name = "MySuccessfulCompany", Description = "Best company ever"};
 
-            context.Projects.Add(new ProjectEntity()
+            _context.Projects.Add(new ProjectEntity()
                 {Name = "Super-duper project", Description = "The most amazing project ever"});
 
-            context.Projects.Add(new ProjectEntity()
+            _context.Projects.Add(new ProjectEntity()
             {
                 Name = "Kind of messy project", Description = "Hmm, this one can definitely be improved"
             });
 
-            company.Projects = new List<ProjectEntity>() {context.Projects.Find(1), context.Projects.Find(2)};
-            context.Companies.Add(company);
+            company.Projects = new List<ProjectEntity>() {_context.Projects.Find(1), _context.Projects.Find(2)};
+            _context.Companies.Add(company);
 
-            var res = controller.GetAll(1) as OkNegotiatedContentResult<List<ProjectResource>>;
+            var res = _controller.GetAll(1) as OkNegotiatedContentResult<List<ProjectResource>>;
 
             Assert.IsNotNull(res);
             Assert.AreEqual(2, res.Content.Count);
@@ -42,21 +48,19 @@ namespace API.Tests.Company
         [Test]
         public void GetAllProjectsOfCompany_BadWeather()
         {
-            var context = new TestContext();
-            var controller = new CompanyProjectController(context);
-            var res = controller.GetAll(1);
+            var res = _controller.GetAll(1);
             Assert.IsNotNull(res);
             Assert.IsInstanceOf<NotFoundResult>(res);
-            context.Companies.Add(new CompanyEntity()
+            _context.Companies.Add(new CompanyEntity()
                 {Name = "MySuccessfulCompany", Description = "Best company ever"});
 
-            var controllerTwo = new CompanyController(context);
+            var controllerTwo = new CompanyController(_context);
             var resTwo = controllerTwo.GetById(1) as OkNegotiatedContentResult<CompanyResource>;
 
             Assert.IsNotNull(resTwo);
             Assert.AreEqual("MySuccessfulCompany", resTwo.Content.Name);
 
-            res = controller.GetAll(1);
+            res = _controller.GetAll(1);
             Assert.IsNotNull(res);
             Assert.IsInstanceOf<NotFoundResult>(res);
         }
@@ -64,21 +68,19 @@ namespace API.Tests.Company
         [Test]
         public void GetProjectOfCompanyById_BadWeather()
         {
-            var context = new TestContext();
-            var controller = new CompanyProjectController(context);
-            var res = controller.GetById(1, 1);
+            var res = _controller.GetById(1, 1);
             Assert.IsNotNull(res);
             Assert.IsInstanceOf<NotFoundResult>(res);
-            context.Companies.Add(new CompanyEntity()
+            _context.Companies.Add(new CompanyEntity()
                 {Name = "MySuccessfulCompany", Description = "Best company ever"});
 
-            var controllerTwo = new CompanyController(context);
+            var controllerTwo = new CompanyController(_context);
             var resTwo = controllerTwo.GetById(1) as OkNegotiatedContentResult<CompanyResource>;
 
             Assert.IsNotNull(resTwo);
             Assert.AreEqual("MySuccessfulCompany", resTwo.Content.Name);
 
-            res = controller.GetById(1, 1);
+            res = _controller.GetById(1, 1);
 
 
             Assert.IsNotNull(res);
@@ -88,9 +90,6 @@ namespace API.Tests.Company
         [Test]
         public void GetProjectOfCompanyById_GoodWeather()
         {
-            var context = new TestContext();
-            var controller = new CompanyProjectController(context);
-
             var company = new CompanyEntity()
                 {Name = "MySuccessfulCompany", Description = "Best company ever"};
 
@@ -102,18 +101,18 @@ namespace API.Tests.Company
                 Name = "Kind of messy project", Description = "Hmm, this one can definitely be improved"
             };
 
-            context.Projects.Add(projectOne);
-            context.Projects.Add(projectTwo);
+            _context.Projects.Add(projectOne);
+            _context.Projects.Add(projectTwo);
 
-            company.Projects = new List<ProjectEntity>() {context.Projects.Find(1), context.Projects.Find(2)};
+            company.Projects = new List<ProjectEntity>() {_context.Projects.Find(1), _context.Projects.Find(2)};
 
-            context.Companies.Add(company);
+            _context.Companies.Add(company);
 
-            var res = controller.GetById(1, 1) as OkNegotiatedContentResult<ProjectResource>;
+            var res = _controller.GetById(1, 1) as OkNegotiatedContentResult<ProjectResource>;
             Assert.IsNotNull(res);
             Assert.AreEqual("Super-duper project", res.Content.Name);
 
-            res = controller.GetById(1, 2) as OkNegotiatedContentResult<ProjectResource>;
+            res = _controller.GetById(1, 2) as OkNegotiatedContentResult<ProjectResource>;
             Assert.IsNotNull(res);
             Assert.AreEqual("Kind of messy project", res.Content.Name);
         }
@@ -121,22 +120,20 @@ namespace API.Tests.Company
         [Test]
         public void AttachProjectToCompany_BadWeather()
         {
-            var context = new TestContext();
-            var controller = new CompanyProjectController(context);
-            var res = controller.Attach(1, 1);
+            var res = _controller.Attach(1, 1);
             Assert.IsNotNull(res);
             Assert.IsInstanceOf<NotFoundResult>(res);
 
-            context.Companies.Add(new CompanyEntity()
+            _context.Companies.Add(new CompanyEntity()
                 {Name = "MySuccessfulCompany", Description = "Best company ever"});
 
-            var controllerTwo = new CompanyController(context);
+            var controllerTwo = new CompanyController(_context);
             var resTwo = controllerTwo.GetById(1) as OkNegotiatedContentResult<CompanyResource>;
 
             Assert.IsNotNull(resTwo);
             Assert.AreEqual("MySuccessfulCompany", resTwo.Content.Name);
 
-            res = controller.Attach(1, 1);
+            res = _controller.Attach(1, 1);
 
             Assert.IsNotNull(res);
             Assert.IsInstanceOf<NotFoundResult>(res);
@@ -145,35 +142,32 @@ namespace API.Tests.Company
         [Test]
         public void AttachProjectToCompany_GoodWeather()
         {
-            var context = new TestContext();
-            var controller = new CompanyProjectController(context);
-
-            context.Companies.Add(new CompanyEntity()
+            _context.Companies.Add(new CompanyEntity()
             {
                 Name = "MySuccessfulCompany", Description = "Best company ever", Projects = new List<ProjectEntity>()
             });
 
-            context.Projects.Add(new ProjectEntity()
+            _context.Projects.Add(new ProjectEntity()
                 {Name = "Super-duper project", Description = "The most amazing project ever"});
 
-            context.Projects.Add(new ProjectEntity()
+            _context.Projects.Add(new ProjectEntity()
             {
                 Name = "Kind of messy project", Description = "Hmm, this one can definitely be improved"
             });
-            var res = controller.Attach(1, 1) as OkNegotiatedContentResult<ProjectResource>;
+            var res = _controller.Attach(1, 1) as OkNegotiatedContentResult<ProjectResource>;
             Assert.IsNotNull(res);
             Assert.AreEqual("Super-duper project", res.Content.Name);
 
-            res = controller.GetById(1, 1) as OkNegotiatedContentResult<ProjectResource>;
+            res = _controller.GetById(1, 1) as OkNegotiatedContentResult<ProjectResource>;
             Assert.IsNotNull(res);
             Assert.AreEqual("Super-duper project", res.Content.Name);
 
 
-            res = controller.Attach(1, 2) as OkNegotiatedContentResult<ProjectResource>;
+            res = _controller.Attach(1, 2) as OkNegotiatedContentResult<ProjectResource>;
             Assert.IsNotNull(res);
             Assert.AreEqual("Kind of messy project", res.Content.Name);
 
-            res = controller.GetById(1, 2) as OkNegotiatedContentResult<ProjectResource>;
+            res = _controller.GetById(1, 2) as OkNegotiatedContentResult<ProjectResource>;
             Assert.IsNotNull(res);
             Assert.AreEqual("Kind of messy project", res.Content.Name);
         }
@@ -181,22 +175,20 @@ namespace API.Tests.Company
         [Test]
         public void DetachProjectFromCompany_BadWeather()
         {
-            var context = new TestContext();
-            var controller = new CompanyProjectController(context);
-            var res = controller.Detach(1, 1);
+            var res = _controller.Detach(1, 1);
             Assert.IsNotNull(res);
             Assert.IsInstanceOf<NotFoundResult>(res);
 
-            context.Companies.Add(new CompanyEntity()
+            _context.Companies.Add(new CompanyEntity()
                 {Name = "MySuccessfulCompany", Description = "Best company ever"});
 
-            var controllerTwo = new CompanyController(context);
+            var controllerTwo = new CompanyController(_context);
             var resTwo = controllerTwo.GetById(1) as OkNegotiatedContentResult<CompanyResource>;
 
             Assert.IsNotNull(resTwo);
             Assert.AreEqual("MySuccessfulCompany", resTwo.Content.Name);
 
-            res = controller.Detach(1, 1);
+            res = _controller.Detach(1, 1);
 
             Assert.IsNotNull(res);
             Assert.IsInstanceOf<NotFoundResult>(res);
@@ -205,29 +197,26 @@ namespace API.Tests.Company
         [Test]
         public void DetachProjectFromCompany_GoodWeather()
         {
-            var context = new TestContext();
-            var controller = new CompanyProjectController(context);
-
             var company = new CompanyEntity()
             {
                 Name = "MySuccessfulCompany", Description = "Best company ever", Projects = new List<ProjectEntity>()
             };
 
-            context.Projects.Add(new ProjectEntity()
+            _context.Projects.Add(new ProjectEntity()
                 {Name = "Super-duper project", Description = "The most amazing project ever"});
 
-            company.Projects = new List<ProjectEntity>() {context.Projects.Find(1)};
+            company.Projects = new List<ProjectEntity>() {_context.Projects.Find(1)};
 
-            context.Companies.Add(company);
-            var res = controller.GetById(1, 1) as OkNegotiatedContentResult<ProjectResource>;
+            _context.Companies.Add(company);
+            var res = _controller.GetById(1, 1) as OkNegotiatedContentResult<ProjectResource>;
             Assert.IsNotNull(res);
             Assert.AreEqual("Super-duper project", res.Content.Name);
 
-            res = controller.Detach(1, 1) as OkNegotiatedContentResult<ProjectResource>;
+            res = _controller.Detach(1, 1) as OkNegotiatedContentResult<ProjectResource>;
             Assert.IsNotNull(res);
             Assert.AreEqual("Super-duper project", res.Content.Name);
 
-            var resTwo = controller.GetById(1, 1);
+            var resTwo = _controller.GetById(1, 1);
 
             Assert.IsNotNull(resTwo);
             Assert.IsInstanceOf<NotFoundResult>(resTwo);

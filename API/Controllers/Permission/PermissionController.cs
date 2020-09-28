@@ -20,7 +20,7 @@ namespace API.Controllers.Permission
         [Route("permissions")]
         public IHttpActionResult GetAll()
         {
-            var results = _permissionService.GetAll(1,1);
+            var results = _permissionService.GetAll();
             return Ok(results);
         }
 

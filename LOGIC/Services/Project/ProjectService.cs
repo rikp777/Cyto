@@ -41,7 +41,7 @@ namespace LOGIC.Services.Project
             return projectEntity == null ? null : ProjectResource.FromEntity(projectEntity);
         }
 
-        public List<ProjectResource> GetAll(int size, int page) => _projectRepository
+        public List<ProjectResource> GetAll() => _projectRepository
             .GetAll()
             .Select(ProjectResource.FromEntity)
             .ToList();
@@ -54,7 +54,7 @@ namespace LOGIC.Services.Project
                 Company = _companyRepository.GetById(1),
                 Permission = new PermissionEntity(){Id = 1},
                 RequestMethod = current.Request.HttpMethod,
-                RequestBaseUrl = current.Request.ToString(),
+                RequestBaseUrl = current.Request.Path,
                 RequestIpAddress = current.Request.UserHostAddress
             };
             

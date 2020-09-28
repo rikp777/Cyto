@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web.Http.Results;
-using System.Xml.Serialization;
 using API.Controllers.Company;
 using Domain.Entities;
 using Domain.Requests;
@@ -11,18 +11,26 @@ using NUnit.Framework;
 namespace API.Tests.Company
 {
     [TestFixture]
-    public class CompanyTest
+    public class CompanyTest : ITestSkeleton
     {
-        [Test]
-        public void GetAllCompanies_GoodWeather()
+        private TestContext _context;
+        private CompanyController _controller;
+
+        [SetUp]
+        public void Init()
         {
-            var context = new TestContext();
-            context.Companies.Add(new CompanyEntity()
+            _context = new TestContext();
+            _controller = new CompanyController(_context);
+        }
+
+        [Test]
+        public void GetAll_GoodWeather()
+        {
+            _context.Companies.Add(new CompanyEntity()
                 {Name = "MySuccessfulCompany", Description = "Best company ever"});
-            context.Companies.Add(new CompanyEntity()
+            _context.Companies.Add(new CompanyEntity()
                 {Name = "MyPoorCompany", Description = "Worst company ever"});
-            var controller = new CompanyController(context);
-            var res = controller.GetAll() as OkNegotiatedContentResult<List<CompanyResource>>;
+            var res = _controller.GetAll() as OkNegotiatedContentResult<List<CompanyResource>>;
 
             Assert.IsNotNull(res);
             Assert.AreEqual(2, res.Content.Count);
@@ -31,156 +39,153 @@ namespace API.Tests.Company
         }
 
         [Test]
-        public void GetAllCompanies_BadWeather()
+        public void GetAll_BadWeather()
         {
-            var context = new TestContext();
-            var controller = new CompanyController(context);
-            var res = controller.GetAll() as OkNegotiatedContentResult<string>;
+            var res = _controller.GetAll() as OkNegotiatedContentResult<string>;
             Assert.IsNotNull(res);
             Assert.AreEqual("There are no companies found", res.Content);
         }
 
         [Test]
-        public void GetCompanyById_GoodWeather()
+        public void GetById_GoodWeather()
         {
-            var context = new TestContext();
-            context.Companies.Add(new CompanyEntity()
+            _context.Companies.Add(new CompanyEntity()
                 {Name = "MySuccessfulCompany", Description = "Best company ever"});
-            var controller = new CompanyController(context);
-            var res = controller.GetById(1) as OkNegotiatedContentResult<CompanyResource>;
+            var res = _controller.GetById(1) as OkNegotiatedContentResult<CompanyResource>;
 
             Assert.IsNotNull(res);
             Assert.AreEqual("MySuccessfulCompany", res.Content.Name);
         }
 
         [Test]
-        public void GetCompanyById_BadWeather()
+        public void GetById_BadWeather()
         {
-            var context = new TestContext();
-            var controller = new CompanyController(context);
-            var res = controller.GetById(1);
+            var res = _controller.GetById(1);
             Assert.IsNotNull(res);
             Assert.IsInstanceOf<NotFoundResult>(res);
         }
 
         [Test]
-        public void CreateCompany_GoodWeather()
+        public void Create_GoodWeather()
         {
-            var context = new TestContext();
-            var controller = new CompanyController(context);
-
             var companyToCreate = new CompanyRequest()
                 {Name = "CrazyCells", Description = "The most crazy cells you can find out there"};
-            var res = controller.Create(companyToCreate) as OkNegotiatedContentResult<bool>;
+            var res = _controller.Create(companyToCreate) as OkNegotiatedContentResult<bool>;
 
             Assert.NotNull(res);
             Assert.IsTrue(res.Content);
-            Assert.AreEqual(1, context.Companies.ToList()[0].Id);
-            Assert.AreEqual("CrazyCells", context.Companies.ToList()[0].Name);
-            Assert.AreEqual("The most crazy cells you can find out there", context.Companies.ToList()[0].Description);
+            Assert.AreEqual(1, _context.Companies.ToList()[0].Id);
+            Assert.AreEqual("CrazyCells", _context.Companies.ToList()[0].Name);
+            Assert.AreEqual("The most crazy cells you can find out there", _context.Companies.ToList()[0].Description);
         }
 
         [Test]
-        public void CreateCompany_BadWeather()
+        public void Model_Validation()
         {
-            var context = new TestContext();
-            var controller = new CompanyController(context);
+            var companyRequest = new CompanyRequest()
+                {Description = "A company without a name shouldn't pass"};
+            var context = new ValidationContext(companyRequest, null, null);
+            var results = new List<ValidationResult>();
+            var isModelStateValid = Validator.TryValidateObject(companyRequest, context, results, true);
+            Assert.IsFalse(isModelStateValid);
+        }
 
-            var res = controller.Create(null) as BadRequestErrorMessageResult;
+        [Test]
+        public void Create_BadWeather()
+        {
+            // #1 - Try creating a company with empty/null body
+            var res = _controller.Create(null) as BadRequestErrorMessageResult;
 
             Assert.NotNull(res);
             Assert.AreEqual("Empty request body!", res.Message);
 
+            // #2 - Try creating two companies with the same name
             var companyToCreate = new CompanyRequest()
-                {Name = "CrazyCells"};
-
-            res = controller.Create(companyToCreate) as BadRequestErrorMessageResult;
-            Assert.NotNull(res);
-            Assert.AreEqual("You cannot create a company without specifying the description", res.Message);
-
-            companyToCreate = new CompanyRequest()
-                {Description = "Some crazy description"};
-            res = controller.Create(companyToCreate) as BadRequestErrorMessageResult;
-            Assert.NotNull(res);
-            Assert.AreEqual("You cannot create a company without specifying the name", res.Message);
-
-
-            companyToCreate = new CompanyRequest()
                 {Name = "CrazyCells", Description = "The most crazy cells you can find out there"};
-            controller.Create(companyToCreate);
+            _controller.Create(companyToCreate);
 
             companyToCreate = new CompanyRequest() {Name = "CrazyCells", Description = "Different description"};
-            res = controller.Create(companyToCreate) as BadRequestErrorMessageResult;
+            res = _controller.Create(companyToCreate) as BadRequestErrorMessageResult;
             Assert.NotNull(res);
             Assert.AreEqual("A company with that name already exists!", res.Message);
+
+            // #3 - Try creating a company without providing a company name
+            _controller.ModelState.AddModelError("error", "A company name must be provided!");
+            companyToCreate = new CompanyRequest()
+                {Description = "The most crazy cells you can find out there"};
+            res = _controller.Create(companyToCreate) as BadRequestErrorMessageResult;
+            Assert.NotNull(res);
+            Assert.AreEqual("A company name must be provided!", res.Message);
         }
 
         [Test]
-        public void UpdateCompany_GoodWeather()
+        public void Update_GoodWeather()
         {
-            var context = new TestContext();
-            var controller = new CompanyController(context);
-            context.Companies.Add(new CompanyEntity()
+            _context.Companies.Add(new CompanyEntity()
                 {Name = "MySuccessfulCompany", Description = "Best company ever"});
-            Assert.AreEqual(1, context.Companies.ToList()[0].Id);
-            Assert.AreEqual("MySuccessfulCompany", context.Companies.ToList()[0].Name);
-            Assert.AreEqual("Best company ever", context.Companies.ToList()[0].Description);
+            Assert.AreEqual(1, _context.Companies.ToList()[0].Id);
+            Assert.AreEqual("MySuccessfulCompany", _context.Companies.ToList()[0].Name);
+            Assert.AreEqual("Best company ever", _context.Companies.ToList()[0].Description);
 
             var updatedCompany = new CompanyRequest()
                 {Description = "Some new crazy description"};
 
-            var res = controller.Update(1, updatedCompany) as OkNegotiatedContentResult<bool>;
+            var res = _controller.Update(1, updatedCompany) as OkNegotiatedContentResult<bool>;
             Assert.NotNull(res);
             Assert.IsTrue(res.Content);
-            Assert.AreEqual(1, context.Companies.ToList()[0].Id);
-            Assert.AreEqual("MySuccessfulCompany", context.Companies.ToList()[0].Name);
-            Assert.AreEqual("Some new crazy description", context.Companies.ToList()[0].Description);
+            Assert.AreEqual(1, _context.Companies.ToList()[0].Id);
+            Assert.AreEqual("MySuccessfulCompany", _context.Companies.ToList()[0].Name);
+            Assert.AreEqual("Some new crazy description", _context.Companies.ToList()[0].Description);
 
             updatedCompany = new CompanyRequest()
                 {Name = "Different Name"};
 
-            res = controller.Update(1, updatedCompany) as OkNegotiatedContentResult<bool>;
+            res = _controller.Update(1, updatedCompany) as OkNegotiatedContentResult<bool>;
             Assert.NotNull(res);
             Assert.IsTrue(res.Content);
-            Assert.AreEqual(1, context.Companies.ToList()[0].Id);
-            Assert.AreEqual("Different Name", context.Companies.ToList()[0].Name);
-            Assert.AreEqual("Some new crazy description", context.Companies.ToList()[0].Description);
-            
+            Assert.AreEqual(1, _context.Companies.ToList()[0].Id);
+            Assert.AreEqual("Different Name", _context.Companies.ToList()[0].Name);
+            Assert.AreEqual("Some new crazy description", _context.Companies.ToList()[0].Description);
+
             updatedCompany = new CompanyRequest()
                 {Name = "Another very different name", Description = "Very different super description"};
 
-            res = controller.Update(1, updatedCompany) as OkNegotiatedContentResult<bool>;
+            res = _controller.Update(1, updatedCompany) as OkNegotiatedContentResult<bool>;
             Assert.NotNull(res);
             Assert.IsTrue(res.Content);
-            Assert.AreEqual(1, context.Companies.ToList()[0].Id);
-            Assert.AreEqual("Another very different name", context.Companies.ToList()[0].Name);
-            Assert.AreEqual("Very different super description", context.Companies.ToList()[0].Description);
-
+            Assert.AreEqual(1, _context.Companies.ToList()[0].Id);
+            Assert.AreEqual("Another very different name", _context.Companies.ToList()[0].Name);
+            Assert.AreEqual("Very different super description", _context.Companies.ToList()[0].Description);
         }
 
         [Test]
-        public void UpdateCompany_BadWeather()
+        public void Update_BadWeather()
         {
-            var context = new TestContext();
-            var controller = new CompanyController(context);
-            var res = controller.Update(1, null) as BadRequestErrorMessageResult;
-
+            // #1 - Try updating a company with empty/null body
+            var res = _controller.Update(1, null) as BadRequestErrorMessageResult;
             Assert.NotNull(res);
             Assert.AreEqual("Empty request body!", res.Message);
-            
+
+            // #2 - Try updating a non-existing company
             var updatedCompany = new CompanyRequest()
                 {Name = "MySuccessfulCompany", Description = "Some new crazy description"};
-            var res1 = controller.Update(1, updatedCompany);
+            var res1 = _controller.Update(1, updatedCompany);
             Assert.IsNotNull(res1);
             Assert.IsInstanceOf<NotFoundResult>(res1);
+
+            // #3 - Try updating a company without providing a company name
+            _controller.ModelState.AddModelError("error", "A company name must be provided!");
+            updatedCompany = new CompanyRequest()
+                {Description = "The most crazy cells you can find out there"};
+            res = _controller.Update(1, updatedCompany) as BadRequestErrorMessageResult;
+            Assert.NotNull(res);
+            Assert.AreEqual("A company name must be provided!", res.Message);
         }
 
         [Test]
         public void DeleteCompany_BadWeather()
         {
-            var context = new TestContext();
-            var controller = new CompanyController(context);
-            var res = controller.Delete(1);
+            var res = _controller.Delete(1);
             Assert.IsNotNull(res);
             Assert.IsInstanceOf<NotFoundResult>(res);
         }

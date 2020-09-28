@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using DAL.Context;
+using DAL.Interfaces;
 using DAL.Repository.User;
 using Domain.Entities;
 using Domain.Requests;
@@ -20,14 +21,19 @@ namespace LOGIC.Services.User
             _userRepository = new UserRepository(new DatabaseContext());
         }
 
+        public UserService(IDatabaseContext context)
+        {
+            _userRepository = new UserRepository(context);
+        }
+
         public UserResource GetById(int id)
         {
             var userEntity = _userRepository.GetById(id);
             return userEntity == null ? null : UserResource.FromEntity(_userRepository.GetById(id));
         }
-        
 
-        public List<UserResource> GetAll(int size, int page) => _userRepository.GetAll()
+
+        public List<UserResource> GetAll() => _userRepository.GetAll()
             .Select(UserResource.FromEntity)
             .ToList();
 

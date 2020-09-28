@@ -174,6 +174,7 @@
     <Compile Include="Controllers\Company\CompanyAuditTrailController.cs" />
     <Compile Include="Controllers\Company\CompanyController.cs" />
     <Compile Include="Controllers\Company\CompanyProjectController.cs" />
+    <Compile Include="Controllers\ControllerHelper.cs" />
     <Compile Include="Controllers\Experiment\ExperimentAuditTrailController.cs" />
     <Compile Include="Controllers\Experiment\ExperimentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -189,7 +190,6 @@
     <Compile Include="Controllers\User\UserController.cs" />
     <Compile Include="Controllers\User\UserProjectController.cs" />
     <Compile Include="Controllers\User\UserRoleController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

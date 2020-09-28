@@ -19,7 +19,7 @@ namespace API.Controllers.Role
         [Route("roles")]
         public IHttpActionResult GetAll()
         {
-            var results = _roleService.GetAll(1,1);
+            var results = _roleService.GetAll();
             return Ok(results);
         }
 

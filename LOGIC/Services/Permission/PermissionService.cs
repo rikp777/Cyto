@@ -21,7 +21,7 @@ namespace LOGIC.Services.Permission
 
         public PermissionResource GetById(int id) => PermissionResource.FromEntity(_permissionRepository.GetById(id));
 
-        public List<PermissionResource> GetAll(int size, int page) => _permissionRepository
+        public List<PermissionResource> GetAll() => _permissionRepository
             .GetAll()
             .Select(PermissionResource.FromEntity)
             .ToList();
