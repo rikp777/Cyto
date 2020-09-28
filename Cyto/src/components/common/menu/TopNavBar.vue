@@ -1,10 +1,10 @@
 <template>
-
+  <div 
 </template>
 
 <script>
 export default {
-name: "MainProjectDashboard"
+  name: "TopNavBar"
 }
 </script>
 

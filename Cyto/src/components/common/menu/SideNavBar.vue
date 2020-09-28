@@ -4,7 +4,7 @@
 
 <script>
 export default {
-name: "MainExperimentDashboard"
+name: "SideNavBar"
 }
 </script>
 
