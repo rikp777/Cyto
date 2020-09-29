@@ -14,5 +14,6 @@ namespace Domain.Entities
         public virtual ICollection<ProjectEntity> Projects { get; set; }
         //Company has many users
         public virtual ICollection<UserEntity> Users { get; set; }
+        public virtual ICollection<LicenseEntity> Licenses { get; set; }
     }
 }

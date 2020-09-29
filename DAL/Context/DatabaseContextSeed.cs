@@ -1,5 +1,6 @@
 using System.Linq;
 using DAL.Seeds;
+using Domain.Entities;
 
 namespace DAL.Context
 {
@@ -23,6 +24,12 @@ namespace DAL.Context
             context.SaveChanges();
             
             ExperimentSeeder.Seeder(context.Experiments, context.Projects);
+            context.SaveChanges();
+            
+            LicenseTypeSeeder.Seeder(context.LicenseTypes);
+            context.SaveChanges();
+            
+            LicenseSeeder.Seeder(context.Licenses, context.LicenseTypes, context.Companies);
             context.SaveChanges();
         }
     }

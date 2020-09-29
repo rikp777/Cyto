@@ -61,6 +61,8 @@
         <Compile Include="Builder\AuditTrailChangeLogBuilder.cs" />
         <Compile Include="Builder\CompanyBuilder.cs" />
         <Compile Include="Builder\ExperimentBuilder.cs" />
+        <Compile Include="Builder\LicenseBuilder.cs" />
+        <Compile Include="Builder\LicenseTypeBuilder.cs" />
         <Compile Include="Builder\PermissionBuilder.cs" />
         <Compile Include="Builder\ProjectBuilder.cs" />
         <Compile Include="Builder\RoleBuilder.cs" />
@@ -68,9 +70,9 @@
         <Compile Include="Context\DatabaseContext.cs" />
         <Compile Include="Context\DatabaseContextSeed.cs" />
         <Compile Include="Interfaces\IDatabaseContext.cs" />
-        <Compile Include="Migrations\202009231330021_AuditTrail.cs" />
-        <Compile Include="Migrations\202009231330021_AuditTrail.Designer.cs">
-          <DependentUpon>202009231330021_AuditTrail.cs</DependentUpon>
+        <Compile Include="Migrations\202009290817089_Migrations.cs" />
+        <Compile Include="Migrations\202009290817089_Migrations.Designer.cs">
+          <DependentUpon>202009290817089_Migrations.cs</DependentUpon>
         </Compile>
         <Compile Include="Migrations\Configuration.cs" />
         <Compile Include="Repository\AuditTrail\AuditTrailRepository.cs" />
@@ -97,6 +99,8 @@
         <Compile Include="Repository\User\UserRoleRepository.cs" />
         <Compile Include="Seeds\CompanySeeder.cs" />
         <Compile Include="Seeds\ExperimentSeeder.cs" />
+        <Compile Include="Seeds\LicenseSeeder.cs" />
+        <Compile Include="Seeds\LicenseTypeSeeder.cs" />
         <Compile Include="Seeds\PermissonSeeder.cs" />
         <Compile Include="Seeds\ProjectSeeder.cs" />
         <Compile Include="Seeds\RoleSeeder.cs" />
@@ -113,8 +117,8 @@
       </ProjectReference>
     </ItemGroup>
     <ItemGroup>
-      <EmbeddedResource Include="Migrations\202009231330021_AuditTrail.resx">
-        <DependentUpon>202009231330021_AuditTrail.cs</DependentUpon>
+      <EmbeddedResource Include="Migrations\202009290817089_Migrations.resx">
+        <DependentUpon>202009290817089_Migrations.cs</DependentUpon>
       </EmbeddedResource>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

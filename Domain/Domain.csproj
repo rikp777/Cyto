@@ -71,6 +71,8 @@
         <Compile Include="Entities\AuditTrailEntity.cs" />
         <Compile Include="Entities\CompanyEntity.cs" />
         <Compile Include="Entities\ExperimentEntity.cs" />
+        <Compile Include="Entities\LicenseEntity.cs" />
+        <Compile Include="Entities\LicenseTypeEntity.cs" />
         <Compile Include="Entities\PermissionEntity.cs" />
         <Compile Include="Entities\ProjectEntity.cs" />
         <Compile Include="Entities\RoleEntity.cs" />

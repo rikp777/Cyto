@@ -36,6 +36,8 @@ namespace DAL.Context
         public DbSet<ProjectEntity> Projects { get; set; }
         public DbSet<AuditTrailEntity> AuditTrails { get; set; }
         public DbSet<AuditTrailChangeLogEntity> AuditTrailChangeLogs { get; set; }
+        public DbSet<LicenseTypeEntity> LicenseTypes { get; set; }
+        public DbSet<LicenseEntity> Licenses { get; set; }
 
         public void MarkAsModified(BaseEntity entity)
         {
@@ -52,8 +54,7 @@ namespace DAL.Context
             base.OnModelCreating(modelBuilder);
             
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-            modelBuilder.Conventions.Add<OneToManyCascadeDeleteConvention>(
-                );
+            modelBuilder.Conventions.Add<OneToManyCascadeDeleteConvention>();
             var userBuilder = new UserBuilder(modelBuilder.Entity<UserEntity>());
             var roleBuilder = new RoleBuilder(modelBuilder.Entity<RoleEntity>());
             var companyBuilder = new CompanyBuilder(modelBuilder.Entity<CompanyEntity>());
@@ -62,6 +63,8 @@ namespace DAL.Context
             var projectBuilder = new ProjectBuilder(modelBuilder.Entity<ProjectEntity>());
             var auditTrailBuilder = new AuditTrailBuilder(modelBuilder.Entity<AuditTrailEntity>());
             var auditTrailChangeLogBuilder = new AuditTrailChangeLogBuilder(modelBuilder.Entity<AuditTrailChangeLogEntity>());
+            var LicenseTypeBuilder = new LicenseTypeBuilder(modelBuilder.Entity<LicenseTypeEntity>());
+            var LicenseBuilder = new LicenseBuilder(modelBuilder.Entity<LicenseEntity>());
         }
     }
 }

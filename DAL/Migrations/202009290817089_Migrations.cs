@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class AuditTrail : DbMigration
+    public partial class Migrations : DbMigration
     {
         public override void Up()
         {
@@ -52,6 +52,33 @@
                         Id = c.Int(nullable: false, identity: true),
                         Name = c.String(nullable: false, maxLength: 250),
                         Description = c.String(nullable: false, maxLength: 500),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.License",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Code = c.String(),
+                        ValidTillDate = c.String(),
+                        Company_Id = c.Int(),
+                        LicenseType_Id = c.Int(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Company", t => t.Company_Id)
+                .ForeignKey("dbo.LicenseType", t => t.LicenseType_Id)
+                .Index(t => t.Id)
+                .Index(t => t.Company_Id)
+                .Index(t => t.LicenseType_Id);
+            
+            CreateTable(
+                "dbo.LicenseType",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Name = c.String(),
+                        Description = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -181,6 +208,8 @@
             DropForeignKey("dbo.AuditTrail", "User_Id", "dbo.User");
             DropForeignKey("dbo.Experiment", "Project_Id", "dbo.Project");
             DropForeignKey("dbo.Project", "Company_Id", "dbo.Company");
+            DropForeignKey("dbo.License", "LicenseType_Id", "dbo.LicenseType");
+            DropForeignKey("dbo.License", "Company_Id", "dbo.Company");
             DropForeignKey("dbo.AuditTrailChangeLog", "AuditTrailEntity_Id", "dbo.AuditTrail");
             DropIndex("dbo.UserRole", new[] { "RoleId" });
             DropIndex("dbo.UserRole", new[] { "UserId" });
@@ -193,6 +222,9 @@
             DropIndex("dbo.User", new[] { "Id" });
             DropIndex("dbo.Experiment", new[] { "Project_Id" });
             DropIndex("dbo.Project", new[] { "Company_Id" });
+            DropIndex("dbo.License", new[] { "LicenseType_Id" });
+            DropIndex("dbo.License", new[] { "Company_Id" });
+            DropIndex("dbo.License", new[] { "Id" });
             DropIndex("dbo.AuditTrail", new[] { "Permission_Id" });
             DropIndex("dbo.AuditTrail", new[] { "Company_Id" });
             DropIndex("dbo.AuditTrail", new[] { "User_Id" });
@@ -206,6 +238,8 @@
             DropTable("dbo.User");
             DropTable("dbo.Experiment");
             DropTable("dbo.Project");
+            DropTable("dbo.LicenseType");
+            DropTable("dbo.License");
             DropTable("dbo.Company");
             DropTable("dbo.AuditTrail");
             DropTable("dbo.AuditTrailChangeLog");
