@@ -82,11 +82,17 @@ namespace DAL.Repository.AuditTrail
             var requestMethod = auditTrailMetaData.RequestMethod;
             var requestBaseUrl = auditTrailMetaData.RequestBaseUrl;
             var requestIpAddress = auditTrailMetaData.RequestIpAddress;
-            
+            var license = auditTrailMetaData.License;
+
+            if (license == false)
+            {
+                license = company.Licenses.Any(x => x.LicenseType.Name == "CFR");
+            }
             
             var now = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
 
             // Validation
+            if (license == false) return false;
             if (user == null) throw new Exception("AuditTrail Error: User is mandatory");
             if (company == null) throw new Exception("AuditTrail Error: Company is mandatory");
             if (permission == null) throw new Exception("AuditTrail Error: Permission is mandatory");
@@ -127,7 +133,7 @@ namespace DAL.Repository.AuditTrail
                     case EntityState.Modified:
                     {
                         var logs = GetChanges();
-                        
+                        if (logs.Count == 0) return false;
                         var auditTrailUpdate = new AuditTrailEntity()
                         {
                             User = user,
@@ -146,6 +152,7 @@ namespace DAL.Repository.AuditTrail
                             
                             CreatedAt = now.ToString(CultureInfo.InvariantCulture),
                         };
+                       
                         _context.Set<AuditTrailEntity>().Add(auditTrailUpdate);
                         return true;
                     }

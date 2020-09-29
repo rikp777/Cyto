@@ -1,3 +1,4 @@
+using System.Linq;
 using DAL.Context;
 using DAL.Interfaces;
 using DAL.Repository.AuditTrail;
@@ -19,7 +20,10 @@ namespace DAL.Repository.Project
         
         public bool SaveChanges(AuditTrailMetaData auditTrailMetaData)
         {
-            _auditTrailRepository.Capture(auditTrailMetaData);
+            if(auditTrailMetaData.Company.Licenses.First(x => x.LicenseType.Name == "CFR") != null)
+            {
+                _auditTrailRepository.Capture(auditTrailMetaData);
+            }
             return _context.SaveChanges() > 0;
         }
     }

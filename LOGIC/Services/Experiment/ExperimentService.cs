@@ -78,15 +78,16 @@ namespace LOGIC.Services.Experiment
         public bool Update(int id, ExperimentRequest entity, HttpContext current)
         {
             var entityOld = _experimentRepository.GetById(id, new List<string>() {"Project.Company"});
-            //var company = entityOld.Project.Company;
+            var company = _companyRepository.GetById(1, new List<string>() {"License.LicenseType"});
             var auditMetaData = new AuditTrailMetaData()
             {
                 User = _userRepository.GetById(1),
-                Company = _companyRepository.GetById(1),
+                Company = company,
                 Permission = new PermissionEntity(),
                 RequestMethod = current.Request.HttpMethod,
                 RequestBaseUrl = current.Request.Path,
-                RequestIpAddress = current.Request.UserHostAddress
+                RequestIpAddress = current.Request.UserHostAddress,
+                License = company.Licenses.Any(x => x.LicenseType.Name == "CFR")
             };
             //var update = ExperimentRequest.ToEntity(entity);
             //update.Id = id;

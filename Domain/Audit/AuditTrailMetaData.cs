@@ -10,5 +10,6 @@ namespace Domain.Audit
         public string RequestBaseUrl;
         public string RequestMethod;
         public string RequestIpAddress;
+        public bool License = false;
     }
 }

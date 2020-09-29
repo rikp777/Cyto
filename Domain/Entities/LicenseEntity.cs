@@ -6,7 +6,7 @@ namespace Domain.Entities
     {
         public string Code { get; set; }
         public string ValidTillDate { get; set; }
-        public LicenseTypeEntity LicenseType { get; set; }
-        public CompanyEntity Company { get; set; }
+        public virtual LicenseTypeEntity LicenseType { get; set; }
+        public virtual CompanyEntity Company { get; set; }
     }
 }

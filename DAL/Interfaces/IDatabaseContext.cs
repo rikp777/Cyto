@@ -16,6 +16,8 @@ namespace DAL.Interfaces
         DbSet<ProjectEntity> Projects { get; set; }
         DbSet<AuditTrailEntity> AuditTrails { get; set; }
         DbSet<AuditTrailChangeLogEntity> AuditTrailChangeLogs { get; set; }
+        DbSet<LicenseTypeEntity> LicenseTypes { get; set; }
+        DbSet<LicenseEntity> Licenses { get; set; }
         
         void MarkAsModified(BaseEntity entity);    
         EntityState GetState(BaseEntity entity);
