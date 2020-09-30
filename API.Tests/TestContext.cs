@@ -33,6 +33,8 @@ namespace API.Tests
         public DbSet<ProjectEntity> Projects { get; set; }
         public DbSet<AuditTrailEntity> AuditTrails { get; set; }
         public DbSet<AuditTrailChangeLogEntity> AuditTrailChangeLogs { get; set; }
+        public DbSet<LicenseTypeEntity> LicenseTypes { get; set; }
+        public DbSet<LicenseEntity> Licenses { get; set; }
 
         public DbEntityEntry Entry(object entity)
         {

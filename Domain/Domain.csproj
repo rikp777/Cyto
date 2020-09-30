@@ -75,6 +75,7 @@
         <Compile Include="Entities\LicenseTypeEntity.cs" />
         <Compile Include="Entities\PermissionEntity.cs" />
         <Compile Include="Entities\ProjectEntity.cs" />
+        <Compile Include="Entities\ProjectOptions.cs" />
         <Compile Include="Entities\RoleEntity.cs" />
         <Compile Include="Entities\UserEntity.cs" />
         <Compile Include="Contracts\BaseEntity.cs" />

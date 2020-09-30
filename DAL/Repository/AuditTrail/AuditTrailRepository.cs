@@ -84,11 +84,8 @@ namespace DAL.Repository.AuditTrail
             var requestIpAddress = auditTrailMetaData.RequestIpAddress;
             var license = auditTrailMetaData.License;
 
-            if (license == false)
-            {
-                license = company.Licenses.Any(x => x.LicenseType.Name == "CFR");
-            }
-            
+            if (license == false) license = company.Licenses.Any(x => x.LicenseType.Name == "CFR");
+
             var now = DateTime.UtcNow.ToString(CultureInfo.InvariantCulture);
 
             // Validation
